@@ -23,7 +23,7 @@ sup { color: #363636; font-size: .68em; line-height: 0; font-weight: 400; }
 .code:hover { background: #292929; }
 a:focus-visible { outline: 3px solid #3273dc; outline-offset: 4px; }
 .paper > section:nth-of-type(odd) { background: #f5f5f5; }
-h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.2; }
+h2, h3 { text-align: center; font-family: var(--display); font-weight: 600; line-height: 1.2; }
 h2 { margin-bottom: 20px; font-size: 30px; letter-spacing: -.02em; }
 h3 { margin: 24px 0 12px; font-size: 22px; }
 .prose { text-align: justify; color: #414141; }
