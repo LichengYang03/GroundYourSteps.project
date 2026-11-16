@@ -10,10 +10,12 @@ body, h1, h2, h3, p, figure { margin: 0; }
 .paper > header, .paper > section { padding: 48px max(24px, calc((100% - 960px) / 2)); }
 .publication { text-align: center; font-family: var(--display); }
 h1 { margin-bottom: 24px; font-size: 40px; font-weight: 600; line-height: 1.125; text-wrap: balance; }
+h1 span { display: block; }
 .authors { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 20px; font-size: 20px; font-weight: 700; }
 .authors span { color: #209cee; white-space: nowrap; }
 sup { color: #363636; font-size: .68em; line-height: 0; font-weight: 400; }
-.affiliations { margin-top: 20px; font-size: 18px; }
+.affiliations, .roles { font-size: 18px; }
+.affiliations { margin-top: 20px; }
 .roles { margin: 6px 0 20px; }
 .roles span { white-space: nowrap; }
 .roles span + span { margin-left: .7em; }
@@ -44,7 +46,6 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
   h1 { font-size: clamp(30px, 7vw, 40px); }
   h2 { font-size: 26px; }
   .authors { column-gap: 14px; font-size: 18px; }
-  .affiliations { font-size: 16px; }
-  .roles { font-size: 15px; }
+  .affiliations, .roles { font-size: 16px; }
   .prose { text-align: start; }
 }
