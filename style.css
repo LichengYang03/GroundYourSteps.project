@@ -1,38 +1,36 @@
 :root {
-  color: #222;
+  color: #363636;
   background: white;
-  font: 16px/1.5 "Myriad Pro", "Open Sans", Arial, sans-serif;
-  --heading: #363636;
+  font: 16px/1.5 "Noto Sans", Arial, sans-serif;
+  --display: "Google Sans", system-ui, sans-serif;
   --frame: #dbdbdb;
 }
 * { box-sizing: border-box; }
 body, h1, h2, h3, p, figure { margin: 0; }
-.paper { width: min(960px, calc(100% - 48px)); margin: auto; padding-bottom: 3rem; }
-.publication { padding: clamp(16px, 3vw, 32px) 0 16px; text-align: center; font-size: 20px; }
-h1, h2, h3 { color: var(--heading); line-height: 1.15; }
-h1 { margin: 0 auto 24px; font: 800 48px/1.15 "Google Sans", system-ui, sans-serif; letter-spacing: -.02em; text-wrap: balance; }
-.authors span { color: #00b803; white-space: nowrap; }
-sup { color: #222; font-size: .72em; line-height: 0; }
-.affiliations, .roles { margin-top: 4px; }
-.affiliations { text-wrap: balance; }
+.paper > header, .paper > section { padding: 48px max(24px, calc((100% - 960px) / 2)); }
+.publication { text-align: center; font-family: var(--display); }
+h1 { margin-bottom: 24px; font-size: 40px; font-weight: 600; line-height: 1.125; text-wrap: balance; }
+.authors { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 20px; font-size: 20px; font-weight: 700; }
+.authors span { color: #209cee; white-space: nowrap; }
+sup { color: #363636; font-size: .68em; line-height: 0; font-weight: 400; }
+.affiliations { margin-top: 20px; font-size: 18px; }
+.roles { margin: 6px 0 20px; }
 .roles span { white-space: nowrap; }
 .roles span + span { margin-left: .7em; }
-.code { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; margin: 16px 0; padding: 7px 20px; border-radius: 999px; color: #fff; background: var(--heading); font-size: 16px; text-decoration: none; }
-.code b { font: bold 15px/1 monospace; }
+.code { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 7px 20px; border-radius: 999px; color: white; background: #363636; font-size: 16px; text-decoration: none; }
 .code:hover { background: #292929; }
 a:focus-visible { outline: 3px solid #3273dc; outline-offset: 4px; }
-.teaser { margin: 20px auto 16px; }
-.teaser a { display: block; width: fit-content; margin: auto; cursor: zoom-in; }
-.teaser img, .figure-slot { border: 1px solid var(--frame); border-radius: 6px; box-shadow: 0 2px 3px rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 10%); }
-.teaser img { display: block; max-width: 100%; width: auto; height: auto; max-height: 80vh; }
-.paper > section { padding-block: 8px; }
-h2, h3 { text-align: center; letter-spacing: -.015em; font-weight: 600; }
-h2 { margin: 8px 0 16px; font-size: 32px; }
-section:not(#abstract) > h2 { text-transform: uppercase; }
-h3 { margin: 16px 0 12px; font-size: 24px; }
-.prose { text-align: justify; }
-.abstract-copy { font-size: 20px; }
+.paper > section:nth-of-type(odd) { background: #f5f5f5; }
+h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.2; }
+h2 { margin-bottom: 20px; font-size: 30px; letter-spacing: -.02em; }
+h3 { margin: 24px 0 12px; font-size: 22px; }
+.prose { text-align: justify; color: #414141; }
+.prose sub { line-height: 0; }
 .prose:empty { min-height: 3em; }
+.teaser { margin-top: 28px; }
+.teaser a { display: block; cursor: zoom-in; }
+.teaser img { display: block; width: 100%; height: auto; }
+.teaser img, .figure-slot { border: 1px solid var(--frame); border-radius: 6px; background: white; }
 .figure-slot { aspect-ratio: 4.4; margin: 16px auto; }
 .gallery-slot { margin: 0 auto 24px; }
 .portrait { width: 180px; aspect-ratio: 9 / 16; border-radius: 15px; margin: auto; background: #363636; }
@@ -42,10 +40,11 @@ h3 { margin: 16px 0 12px; font-size: 24px; }
 .simulation-slot i { aspect-ratio: 4 / 3; background: #fafafa; }
 .simulation-slot i + i { border-left: 1px solid var(--frame); }
 @media (max-width: 650px) {
-  .paper { width: calc(100% - 32px); }
-  h1 { font-size: clamp(32px, 7vw, 44px); }
-  .publication { font-size: 17px; }
-  .roles { font-size: 16px; }
-  .teaser img { max-height: none; }
-  h2 { font-size: 28px; }
+  .paper > header, .paper > section { padding: 32px 18px; }
+  h1 { font-size: clamp(30px, 7vw, 40px); }
+  h2 { font-size: 26px; }
+  .authors { column-gap: 14px; font-size: 18px; }
+  .affiliations { font-size: 16px; }
+  .roles { font-size: 15px; }
+  .prose { text-align: start; }
 }
