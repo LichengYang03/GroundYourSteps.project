@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ground Your Steps: Optimizing Sampling Schedules in Flow Matching Robot Policies</title>
-  <link rel="stylesheet" href="./style.css?v=7">
+  <link rel="stylesheet" href="./style.css?v=8">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans&amp;family=Open+Sans:wght@400;600&amp;display=swap">
 </head>
 <body>
@@ -156,115 +156,117 @@
           </p>
         </div>
 
-        <div class="table-wrap">
-          <table class="results-table">
-            <caption>
-              <strong>Table 1.</strong> Closed-loop success rate (%) on 50 RoboTwin 2.0 tasks at
-              <em>B</em> &isin; {3, 4, 5, 6, 8, 10} (mean &plusmn; std over four evaluation rounds, 100
-              episodes per task per round). Avg. reports the mean and std across the six budgets. Latency (ms)
-              is the mean per-chunk inference time on one NVIDIA L4 GPU, identical for Uniform and GYS at each
-              budget.
-            </caption>
-            <thead>
-              <tr>
-                <th>Policy</th>
-                <th>Schedule</th>
-                <th><em>B</em> = 3</th>
-                <th><em>B</em> = 4</th>
-                <th><em>B</em> = 5</th>
-                <th><em>B</em> = 6</th>
-                <th><em>B</em> = 8</th>
-                <th><em>B</em> = 10</th>
-                <th>Avg.</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td rowspan="4" class="policy-cell">π<sub>0.5</sub></td>
-                <td>Uniform</td>
-                <td>67.7<sub>&plusmn;0.6</sub></td>
-                <td>68.2<sub>&plusmn;0.4</sub></td>
-                <td>68.0<sub>&plusmn;0.5</sub></td>
-                <td>67.7<sub>&plusmn;0.4</sub></td>
-                <td>66.9<sub>&plusmn;0.4</sub></td>
-                <td>66.6<sub>&plusmn;0.2</sub></td>
-                <td>67.5<sub>&plusmn;0.6</sub></td>
-              </tr>
-              <tr class="highlight-row">
-                <td><strong>GYS (ours)</strong></td>
-                <td><strong>70.9<sub>&plusmn;0.3</sub></strong></td>
-                <td><strong>71.7<sub>&plusmn;0.3</sub></strong></td>
-                <td><strong>70.8<sub>&plusmn;0.2</sub></strong></td>
-                <td><strong>69.6<sub>&plusmn;0.4</sub></strong></td>
-                <td><strong>69.3<sub>&plusmn;0.2</sub></strong></td>
-                <td><strong>69.3<sub>&plusmn;0.3</sub></strong></td>
-                <td><strong>70.3<sub>&plusmn;1.0</sub></strong></td>
-              </tr>
-              <tr class="gain-row">
-                <td>Gain</td>
-                <td>+3.2</td>
-                <td>+3.5</td>
-                <td>+2.8</td>
-                <td>+1.9</td>
-                <td>+2.4</td>
-                <td>+2.7</td>
-                <td>+2.8</td>
-              </tr>
-              <tr class="latency-row">
-                <td>Latency (ms)</td>
-                <td>185</td>
-                <td>196</td>
-                <td>215</td>
-                <td>230</td>
-                <td>269</td>
-                <td>302</td>
-                <td>&ndash;</td>
-              </tr>
-
-              <tr class="group-sep">
-                <td rowspan="4" class="policy-cell">GR00T N1.7</td>
-                <td>Uniform</td>
-                <td>47.8<sub>&plusmn;0.7</sub></td>
-                <td>48.6<sub>&plusmn;0.6</sub></td>
-                <td>50.7<sub>&plusmn;0.7</sub></td>
-                <td>52.1<sub>&plusmn;0.5</sub></td>
-                <td>48.0<sub>&plusmn;0.6</sub></td>
-                <td>47.7<sub>&plusmn;0.5</sub></td>
-                <td>49.2<sub>&plusmn;1.8</sub></td>
-              </tr>
-              <tr class="highlight-row">
-                <td><strong>GYS (ours)</strong></td>
-                <td><strong>51.0<sub>&plusmn;0.5</sub></strong></td>
-                <td><strong>51.9<sub>&plusmn;0.4</sub></strong></td>
-                <td><strong>51.7<sub>&plusmn;0.4</sub></strong></td>
-                <td><strong>52.5<sub>&plusmn;0.6</sub></strong></td>
-                <td><strong>53.0<sub>&plusmn;0.5</sub></strong></td>
-                <td><strong>51.8<sub>&plusmn;0.5</sub></strong></td>
-                <td><strong>52.0<sub>&plusmn;0.7</sub></strong></td>
-              </tr>
-              <tr class="gain-row">
-                <td>Gain</td>
-                <td>+3.2</td>
-                <td>+3.3</td>
-                <td>+1.0</td>
-                <td>+0.4</td>
-                <td>+5.0</td>
-                <td>+4.1</td>
-                <td>+2.8</td>
-              </tr>
-              <tr class="latency-row">
-                <td>Latency (ms)</td>
-                <td>123</td>
-                <td>148</td>
-                <td>158</td>
-                <td>175</td>
-                <td>206</td>
-                <td>242</td>
-                <td>&ndash;</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <figure class="results" id="simulation-results">
+          <figcaption id="results-title"><strong>Table 1.</strong> Closed-loop success rate (%) on 50 RoboTwin 2.0 tasks</figcaption>
+          <div class="table-wrap" role="region" aria-labelledby="results-title" tabindex="0">
+            <table class="results-table" aria-labelledby="results-title" aria-describedby="results-note">
+              <colgroup><col class="policy-col"><col class="schedule-col"><col span="7"></colgroup>
+              <thead>
+                <tr>
+                  <th scope="col" class="policy-label">Policy</th>
+                  <th scope="col" class="schedule-label">Schedule</th>
+                  <th scope="col"><em>B</em> = 3</th>
+                  <th scope="col"><em>B</em> = 4</th>
+                  <th scope="col"><em>B</em> = 5</th>
+                  <th scope="col"><em>B</em> = 6</th>
+                  <th scope="col"><em>B</em> = 8</th>
+                  <th scope="col"><em>B</em> = 10</th>
+                  <th scope="col">Avg.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="rowgroup" rowspan="4" class="policy-label">π<sub>0.5</sub></th>
+                  <th scope="row" class="schedule-label">Uniform</th>
+                  <td>67.7<span class="std">&plusmn;0.6</span></td>
+                  <td>68.2<span class="std">&plusmn;0.4</span></td>
+                  <td>68.0<span class="std">&plusmn;0.5</span></td>
+                  <td>67.7<span class="std">&plusmn;0.4</span></td>
+                  <td>66.9<span class="std">&plusmn;0.4</span></td>
+                  <td>66.6<span class="std">&plusmn;0.2</span></td>
+                  <td>67.5<span class="std">&plusmn;0.6</span></td>
+                </tr>
+                <tr class="highlight-row">
+                  <th scope="row" class="schedule-label"><strong>GYS (ours)</strong></th>
+                  <td><strong>70.9<span class="std">&plusmn;0.3</span></strong></td>
+                  <td><strong>71.7<span class="std">&plusmn;0.3</span></strong></td>
+                  <td><strong>70.8<span class="std">&plusmn;0.2</span></strong></td>
+                  <td><strong>69.6<span class="std">&plusmn;0.4</span></strong></td>
+                  <td><strong>69.3<span class="std">&plusmn;0.2</span></strong></td>
+                  <td><strong>69.3<span class="std">&plusmn;0.3</span></strong></td>
+                  <td><strong>70.3<span class="std">&plusmn;1.0</span></strong></td>
+                </tr>
+                <tr class="gain-row">
+                  <th scope="row" class="schedule-label">Gain</th>
+                  <td>+3.2</td>
+                  <td>+3.5</td>
+                  <td>+2.8</td>
+                  <td>+1.9</td>
+                  <td>+2.4</td>
+                  <td>+2.7</td>
+                  <td>+2.8</td>
+                </tr>
+                <tr class="latency-row">
+                  <th scope="row" class="schedule-label">Latency (ms)</th>
+                  <td>185</td>
+                  <td>196</td>
+                  <td>215</td>
+                  <td>230</td>
+                  <td>269</td>
+                  <td>302</td>
+                  <td>&ndash;</td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr>
+                  <th scope="rowgroup" rowspan="4" class="policy-label">GR00T N1.7</th>
+                  <th scope="row" class="schedule-label">Uniform</th>
+                  <td>47.8<span class="std">&plusmn;0.7</span></td>
+                  <td>48.6<span class="std">&plusmn;0.6</span></td>
+                  <td>50.7<span class="std">&plusmn;0.7</span></td>
+                  <td>52.1<span class="std">&plusmn;0.5</span></td>
+                  <td>48.0<span class="std">&plusmn;0.6</span></td>
+                  <td>47.7<span class="std">&plusmn;0.5</span></td>
+                  <td>49.2<span class="std">&plusmn;1.8</span></td>
+                </tr>
+                <tr class="highlight-row">
+                  <th scope="row" class="schedule-label"><strong>GYS (ours)</strong></th>
+                  <td><strong>51.0<span class="std">&plusmn;0.5</span></strong></td>
+                  <td><strong>51.9<span class="std">&plusmn;0.4</span></strong></td>
+                  <td><strong>51.7<span class="std">&plusmn;0.4</span></strong></td>
+                  <td><strong>52.5<span class="std">&plusmn;0.6</span></strong></td>
+                  <td><strong>53.0<span class="std">&plusmn;0.5</span></strong></td>
+                  <td><strong>51.8<span class="std">&plusmn;0.5</span></strong></td>
+                  <td><strong>52.0<span class="std">&plusmn;0.7</span></strong></td>
+                </tr>
+                <tr class="gain-row">
+                  <th scope="row" class="schedule-label">Gain</th>
+                  <td>+3.2</td>
+                  <td>+3.3</td>
+                  <td>+1.0</td>
+                  <td>+0.4</td>
+                  <td>+5.0</td>
+                  <td>+4.1</td>
+                  <td>+2.8</td>
+                </tr>
+                <tr class="latency-row">
+                  <th scope="row" class="schedule-label">Latency (ms)</th>
+                  <td>123</td>
+                  <td>148</td>
+                  <td>158</td>
+                  <td>175</td>
+                  <td>206</td>
+                  <td>242</td>
+                  <td>&ndash;</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note" id="results-note">Results at <em>B</em> &isin; {3, 4, 5, 6, 8, 10} are reported as
+            mean &plusmn; std over four evaluation rounds (100 episodes per task per round). Avg. reports the mean
+            and std across the six budgets. Latency (ms) is the mean per-chunk inference time on one NVIDIA L4 GPU,
+            identical for Uniform and GYS at each budget.</p>
+        </figure>
       </section>
       <section id="real-world">
         <h3>Real-world Experiments</h3>
