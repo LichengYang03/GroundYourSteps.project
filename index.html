@@ -123,10 +123,10 @@
           Ground Your Steps (GYS) is a training-free method that optimizes the sampling schedule
           \(\boldsymbol{\tau}\) of a frozen flow matching policy with weights \(\theta\) offline under a fixed
           NFE budget \(B\), using a calibration set \(\{(o_m, y_m)\}_{m=1}^M\) of observations \(o_m\) and
-          demonstrated action chunks \(y_m\). Let \(\xi(o)\) denote the mean-pooled observation summary from
-          the backbone, and let \(p^{\boldsymbol{\tau}}_{\xi}\) and \(q_{\xi}\) denote the generated and
-          demonstrated action-chunk distributions conditioned on \(\xi\). Ideally, the schedule should align
-          these two conditional distributions (Eq.&nbsp;\eqref{eq:target}). To suppress schedule-invariant offsets
+          demonstrated action chunks \(y_m\). Let \(\xi(o)\) denote the observation summary from the backbone,
+          and let \(p^{\boldsymbol{\tau}}_{\xi}\) and \(q_{\xi}\) denote the generated and demonstrated
+          action-chunk distributions conditioned on \(\xi\). Ideally, the schedule should align these two
+          conditional distributions (Eq.&nbsp;\eqref{eq:target}). To suppress schedule-invariant offsets
           between the frozen policy and demonstrations, GYS transforms each chunk through a <em>truncated
           fractional-difference operator</em> \(\Phi_{\nu}\) of differencing order \(\nu\) along each arm
           joint&rsquo;s action sequence, yielding the transformed target for \(X \sim p^{\boldsymbol{\tau}}_{\xi}\)
@@ -148,11 +148,10 @@
           \(X, X' \sim p^{\boldsymbol{\tau}}_{\xi}\) alongside the demonstration \(Y \sim q_{\xi}\) at each
           observation and compares two transformed pairwise-difference distributions, differences of a generated
           chunk against a demonstration and differences of two independent generated chunks against each other
-          (Eq.&nbsp;\eqref{eq:pairwise-laws}). To pool samples across the calibration set while preserving conditional
-          alignment, GYS pairs each difference with its observation summary \(\xi(o)\), forming joint samples
-          \(c\) and \(s\) with population distributions \(C^{*}\) and \(S^{*}\) (Eq.&nbsp;\eqref{eq:joint}). Under
-          the transformed target in Eq.&nbsp;\eqref{eq:target-phi}, \(C^{*}\) and \(S^{*}\) coincide if and only if
-          the transformed generated and demonstrated action distributions match.
+          (Eq.&nbsp;\eqref{eq:pairwise-laws}). GYS pairs each difference with its observation summary
+          \(\xi(o)\), forming joint samples \(c\) and \(s\) with population distributions \(C^{*}\) and
+          \(S^{*}\) (Eq.&nbsp;\eqref{eq:joint}). \(C^{*}\) and \(S^{*}\) coincide if and only if the
+          transformed generated and demonstrated action distributions match.
         </p>
         <div class="math-block">
           \begin{equation}\label{eq:pairwise-laws}
@@ -171,12 +170,11 @@
           \(\mathcal{D}_{\lambda}\) with observation weight \(\lambda > 0\) (Eq.&nbsp;\eqref{eq:metric}) and
           minimizes their energy distance \(\mathcal{E}_{\lambda}(C^{*}, S^{*})\) over independent copies
           \(\tilde{c} \sim C^{*}\) and \(\tilde{s} \sim S^{*}\) (Eq.&nbsp;\eqref{eq:energy}), as illustrated in
-          Figure 1(c). Evaluating the empirical energy distance \(\widehat{\mathcal{E}}_{\lambda}\) on the
-          calibration set at a calibrated differencing order \(\nu^{\star}\), GYS optimizes the schedule
-          \(\boldsymbol{\tau}(h)\) over positive step widths \(h \in \mathcal{H}_B\) to deliver a non-uniform
-          schedule \(\boldsymbol{\tau}^{\star}\) (Eq.&nbsp;\eqref{eq:loss}, Figure 1(b)). At deployment,
-          \(\boldsymbol{\tau}^{\star}\) replaces the uniform grid and raises the success rate across budgets
-          without changing the policy weights \(\theta\) or the inference cost (Figure 1(d)).
+          Figure 1(c). Minimizing the energy distance \(\widehat{\mathcal{E}}_{\lambda}\) on the calibration
+          set at a calibrated differencing order \(\nu^{\star}\) over \(h \in \mathcal{H}_B\), GYS delivers a
+          non-uniform schedule \(\boldsymbol{\tau}^{\star}\) (Eq.&nbsp;\eqref{eq:loss}, Figure 1(b)). At
+          deployment, \(\boldsymbol{\tau}^{\star}\) replaces the uniform grid and raises the success rate
+          across budgets without changing the policy weights \(\theta\) or the inference cost (Figure 1(d)).
         </p>
         <div class="math-block">
           \begin{equation}\label{eq:metric}
