@@ -1,8 +1,9 @@
 :root {
   color: #363636;
   background: white;
-  font: 16px/1.5 "Inter", Arial, sans-serif;
-  --display: "Google Sans", system-ui, sans-serif;
+  --body: "Inter", sans-serif;
+  font: 400 16px/1.5 var(--body);
+  --display: "Google Sans", var(--body);
   --frame: #dbdbdb;
 }
 * { box-sizing: border-box; }
@@ -37,7 +38,8 @@ a:focus-visible { outline: 3px solid #3273dc; outline-offset: 4px; }
 h2, h3 { text-align: center; font-family: var(--display); font-weight: 600; line-height: 1.2; }
 h2 { margin-bottom: 20px; font-size: 30px; letter-spacing: -.02em; }
 h3 { margin: 24px 0 12px; font-size: 22px; }
-.prose { text-align: justify; color: #595959; }
+.prose, .question-callout { color: #0a0a0a; }
+.prose { text-align: justify; }
 .prose sub { line-height: 0; }
 .prose p + p { margin-top: 1em; }
 .prose:empty { min-height: 3em; }
@@ -47,9 +49,6 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
   border-left: 4px solid #209cee;
   border-radius: 6px;
   background: #eef6fc;
-  color: #2c3e50;
-  font-style: italic;
-  line-height: 1.55;
 }
 .teaser { max-width: 800px; margin: 28px auto 0; }
 .teaser a { display: block; cursor: zoom-in; }
