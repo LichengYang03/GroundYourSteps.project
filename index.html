@@ -138,22 +138,17 @@
         <div class="prose">
           <p>
             We evaluate GYS against the default uniform sampling schedule on the RoboTwin 2.0 benchmark across
-            50 manipulation tasks with a dual-arm Aloha-AgileX embodiment, using π<sub>0.5</sub> and GR00T N1.7
-            fine-tuned on the official clean datasets. Each task&ndash;budget cell is evaluated for 100
-            episodes across four independent rounds under shared prompts, scene seeds, and initial-noise seeds
-            at NFE budgets <em>B</em> &isin; {3, 4, 5, 6, 8, 10}.
+            50 manipulation tasks, using π<sub>0.5</sub> and GR00T N1.7 fine-tuned on the official clean
+            datasets. For each task and NFE budget <em>B</em> &isin; {3, 4, 5, 6, 8, 10}, we run four
+            independent evaluation rounds of 100 episodes each.
           </p>
           <p>
             As summarized in <strong>Figure 1(d)</strong> and <strong>Table 1</strong>, GYS consistently
             outperforms the uniform schedule at every tested budget for both policies, raising the mean
             closed-loop success rate across budgets by <strong>2.8 percentage points</strong> for both
-            π<sub>0.5</sub> (67.5% &rarr; 70.3%) and GR00T N1.7 (49.2% &rarr; 52.0%). In addition to higher
-            accuracy, GYS substantially improves the success&ndash;latency trade-off: for π<sub>0.5</sub>, GYS
-            at <em>B</em> = 4 (71.7%, 196 ms) and <em>B</em> = 6 (69.6%, 230 ms) both surpass the 10-step
-            uniform baseline (66.6%, 302 ms) while cutting per-chunk inference latency on an NVIDIA L4 GPU by
-            35% and 24%, respectively. For GR00T N1.7, GYS also prevents the sharp degradation of uniform
-            sampling at larger budgets, delivering gains of +5.0 percentage points at <em>B</em> = 8 and +4.1
-            percentage points at <em>B</em> = 10.
+            π<sub>0.5</sub> (67.5% &rarr; 70.3%) and GR00T N1.7 (49.2% &rarr; 52.0%). For GR00T N1.7, GYS also
+            prevents the sharp degradation of uniform sampling at larger budgets, delivering gains of +5.0
+            percentage points at <em>B</em> = 8 and +4.1 percentage points at <em>B</em> = 10.
           </p>
         </div>
 
@@ -249,6 +244,23 @@
       </section>
       <section id="real-world">
         <h3>Real-world Experiments</h3>
+        <div class="prose">
+          <p>
+            We further validate GYS on a ROKAE AR5 dual-arm platform across three manipulation tasks of
+            increasing difficulty, pulling a drawer and picking cubes (<strong>PaP</strong>), sorting cubes by
+            color (<strong>SbC</strong>), and stacking cubes and covering them (<strong>SaC</strong>). Both
+            π<sub>0.5</sub> and GR00T N1.7 are evaluated against the uniform schedule at NFE budgets
+            <em>B</em> &isin; {3, 4} over 100 episodes per task.
+          </p>
+          <p>
+            As shown in <strong>Table 2</strong>, the simulation gains transfer cleanly to the real robot.
+            GYS improves the three-task average for both policies at both budgets by <strong>1.7 to 3.3
+            percentage points</strong>, with consistent gains on the more challenging multi-stage tasks
+            <strong>SbC</strong> and <strong>SaC</strong>. Notably, GYS at <em>B</em> = 3 already
+            outperforms the 4-step uniform baseline on average for both π<sub>0.5</sub> (68.7% vs. 68.3%) and
+            GR00T N1.7 (65.3% vs. 65.0%).
+          </p>
+        </div>
         <figure class="results" id="real-world-results">
           <figcaption id="robot-results-title"><strong>Table 2.</strong> Closed-loop success rate (%) on three ROKAE AR5 tasks.
             Both schedules use the same 100-episode benchmark.
