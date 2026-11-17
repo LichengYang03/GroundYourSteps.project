@@ -79,6 +79,9 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
   -moz-osx-font-smoothing: grayscale;
 }
 .prose { text-align: justify; }
+#figure-1, .math-block > [id] { scroll-margin-top: 1rem; }
+.paper-ref { color: #006eb8; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .15em; }
+.paper-ref:hover { text-decoration-thickness: 2px; }
 .prose sub { line-height: 0; }
 .prose p + p { margin-top: 1em; }
 .prose:empty { min-height: 3em; }

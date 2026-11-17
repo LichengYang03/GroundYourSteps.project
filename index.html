@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ground Your Steps: Optimizing Sampling Schedules in Flow Matching Robot Policies</title>
-  <link rel="stylesheet" href="./style.css?v=21">
+  <link rel="stylesheet" href="./style.css?v=22">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=Google+Sans&amp;display=swap">
   <script>
     window.MathJax = {
@@ -94,7 +94,7 @@
           from the demonstrated distribution for two reasons. Averaging differently directed path velocities
           creates curved marginal trajectories that coarse steps fail to resolve, while near the action
           endpoint the marginal field becomes sensitive to small perturbations and amplifies integration
-          errors. In closed-loop evaluations across 50 RoboTwin 2.0 tasks (Figure 1(a)), uniform sampling
+          errors. In closed-loop evaluations across 50 RoboTwin 2.0 tasks (<a class="paper-ref" href="#figure-1">Figure&nbsp;1(a)</a>), uniform sampling
           exhibits non-monotonic performance as the NFE budget <em>B</em> increases. At a fixed budget of
           <em>B</em> = 5, shifting sampling nodes moderately toward the noise start (<em>s</em> = 0.25)
           outperforms the uniform grid (<em>s</em> = 0.5), whereas pushing nodes too close to either endpoint
@@ -109,7 +109,7 @@
           policy weights or adding inference cost.
         </p>
       </div>
-      <figure class="teaser">
+      <figure class="teaser" id="figure-1">
         <a href="./assets/fig1.png" aria-label="Open Figure 1 at full resolution">
           <img width="2699" height="1834" src="./assets/fig1.png" alt="Figure 1. Ground Your Steps overview showing how sampling schedules affect robot policy performance.">
         </a>
@@ -126,21 +126,25 @@
           demonstrated action chunks \(y_m\). Let \(\xi(o)\) denote the observation summary from the backbone,
           and let \(p^{\boldsymbol{\tau}}_{\xi}\) and \(q_{\xi}\) denote the generated and demonstrated
           action-chunk distributions conditioned on \(\xi\). Ideally, the schedule should align these two
-          conditional distributions (Eq.&nbsp;(1)). To suppress schedule-invariant offsets
+          conditional distributions (<a class="paper-ref" href="#eq-1">Eq.&nbsp;(1)</a>). To suppress schedule-invariant offsets
           between the frozen policy and demonstrations, GYS transforms each chunk through a <em>truncated
           fractional-difference operator</em> \(\Phi_{\nu}\) of differencing order \(\nu\) along each arm
           joint&rsquo;s action sequence, yielding the transformed target for \(X \sim p^{\boldsymbol{\tau}}_{\xi}\)
-          and \(Y \sim q_{\xi}\) (Eq.&nbsp;(2)).
+          and \(Y \sim q_{\xi}\) (<a class="paper-ref" href="#eq-2">Eq.&nbsp;(2)</a>).
         </p>
         <div class="math-block">
-          \begin{equation}
-          p^{\boldsymbol{\tau}}_{\xi} = q_{\xi} \qquad \text{for almost every } \xi
-          \end{equation}
-          \begin{equation}
-          \operatorname{Law}\bigl(\Phi_{\nu}(X) \mid \xi\bigr)
-          = \operatorname{Law}\bigl(\Phi_{\nu}(Y) \mid \xi\bigr)
-          \qquad \text{for almost every } \xi
-          \end{equation}
+          <div id="eq-1">
+            \begin{equation}
+            p^{\boldsymbol{\tau}}_{\xi} = q_{\xi} \qquad \text{for almost every } \xi
+            \end{equation}
+          </div>
+          <div id="eq-2">
+            \begin{equation}
+            \operatorname{Law}\bigl(\Phi_{\nu}(X) \mid \xi\bigr)
+            = \operatorname{Law}\bigl(\Phi_{\nu}(Y) \mid \xi\bigr)
+            \qquad \text{for almost every } \xi
+            \end{equation}
+          </div>
         </div>
         <p>
           Because a calibration dataset provides only one demonstrated chunk per observation, \(q_{\xi}\) cannot
@@ -148,50 +152,60 @@
           \(X, X' \sim p^{\boldsymbol{\tau}}_{\xi}\) alongside the demonstration \(Y \sim q_{\xi}\) at each
           observation and compares two transformed pairwise-difference distributions, differences of a generated
           chunk against a demonstration and differences of two independent generated chunks against each other
-          (Eq.&nbsp;(3)). GYS pairs each difference with its observation summary
+          (<a class="paper-ref" href="#eq-3">Eq.&nbsp;(3)</a>). GYS pairs each difference with its observation summary
           \(\xi(o)\), forming joint samples \(c\) and \(s\) with population distributions \(C^{*}\) and
-          \(S^{*}\) (Eq.&nbsp;(4)). \(C^{*}\) and \(S^{*}\) coincide if and only if the
+          \(S^{*}\) (<a class="paper-ref" href="#eq-4">Eq.&nbsp;(4)</a>). \(C^{*}\) and \(S^{*}\) coincide if and only if the
           transformed generated and demonstrated action distributions match.
         </p>
         <div class="math-block">
-          \begin{equation}
-          C_{\xi} = \operatorname{Law}\bigl(\Phi_{\nu}(X - Y) \mid \xi\bigr),
-          \qquad
-          S_{\xi} = \operatorname{Law}\bigl(\Phi_{\nu}(X - X') \mid \xi\bigr)
-          \end{equation}
-          \begin{equation}
-          c = \bigl(\xi(o),\, \Phi_{\nu}(X - Y)\bigr) \sim C^{*},
-          \qquad
-          s = \bigl(\xi(o),\, \Phi_{\nu}(X - X')\bigr) \sim S^{*}
-          \end{equation}
+          <div id="eq-3">
+            \begin{equation}
+            C_{\xi} = \operatorname{Law}\bigl(\Phi_{\nu}(X - Y) \mid \xi\bigr),
+            \qquad
+            S_{\xi} = \operatorname{Law}\bigl(\Phi_{\nu}(X - X') \mid \xi\bigr)
+            \end{equation}
+          </div>
+          <div id="eq-4">
+            \begin{equation}
+            c = \bigl(\xi(o),\, \Phi_{\nu}(X - Y)\bigr) \sim C^{*},
+            \qquad
+            s = \bigl(\xi(o),\, \Phi_{\nu}(X - X')\bigr) \sim S^{*}
+            \end{equation}
+          </div>
         </div>
         <p>
           GYS measures the discrepancy between \(C^{*}\) and \(S^{*}\) under a weighted Euclidean metric
-          \(\mathcal{D}_{\lambda}\) with observation weight \(\lambda > 0\) (Eq.&nbsp;(5)) and
+          \(\mathcal{D}_{\lambda}\) with observation weight \(\lambda > 0\) (<a class="paper-ref" href="#eq-5">Eq.&nbsp;(5)</a>) and
           minimizes their energy distance \(\mathcal{E}_{\lambda}(C^{*}, S^{*})\) over independent copies
-          \(\tilde{c} \sim C^{*}\) and \(\tilde{s} \sim S^{*}\) (Eq.&nbsp;(6)), as illustrated in
-          Figure 1(c). Minimizing the energy distance \(\widehat{\mathcal{E}}_{\lambda}\) on the calibration
+          \(\tilde{c} \sim C^{*}\) and \(\tilde{s} \sim S^{*}\) (<a class="paper-ref" href="#eq-6">Eq.&nbsp;(6)</a>), as illustrated in
+          <a class="paper-ref" href="#figure-1">Figure&nbsp;1(c)</a>. Minimizing the energy distance \(\widehat{\mathcal{E}}_{\lambda}\) on the calibration
           set at a calibrated differencing order \(\nu^{\star}\) over \(h \in \mathcal{H}_B\), GYS delivers a
-          non-uniform schedule \(\boldsymbol{\tau}^{\star}\) (Eq.&nbsp;(7), Figure 1(b)). At
+          non-uniform schedule \(\boldsymbol{\tau}^{\star}\) (<a class="paper-ref" href="#eq-7">Eq.&nbsp;(7)</a>, <a class="paper-ref" href="#figure-1">Figure&nbsp;1(b)</a>). At
           deployment, \(\boldsymbol{\tau}^{\star}\) replaces the uniform grid and raises the success rate
-          across budgets without changing the policy weights \(\theta\) or the inference cost (Figure 1(d)).
+          across budgets without changing the policy weights \(\theta\) or the inference cost (<a class="paper-ref" href="#figure-1">Figure&nbsp;1(d)</a>).
         </p>
         <div class="math-block">
-          \begin{equation}
-          \mathcal{D}_{\lambda}\bigl((\xi, \phi),\, (\xi', \phi')\bigr)
-          = \sqrt{\,\lambda^{2} \lVert \xi - \xi' \rVert^{2} + \lVert \phi - \phi' \rVert^{2}\,}
-          \end{equation}
-          \begin{equation}
-          \mathcal{E}_{\lambda}(C^{*}, S^{*})
-          = 2\,\mathbb{E}\,\mathcal{D}_{\lambda}(c, s)
-          - \mathbb{E}\,\mathcal{D}_{\lambda}(c, \tilde{c})
-          - \mathbb{E}\,\mathcal{D}_{\lambda}(s, \tilde{s})
-          \end{equation}
-          \begin{equation}
-          \boldsymbol{\tau}^{\star} = \boldsymbol{\tau}(h^{\star}),
-          \qquad
-          h^{\star} = \arg\min_{h \in \mathcal{H}_B} \widehat{\mathcal{E}}_{\lambda}\bigl(\nu^{\star};\, \boldsymbol{\tau}(h)\bigr)
-          \end{equation}
+          <div id="eq-5">
+            \begin{equation}
+            \mathcal{D}_{\lambda}\bigl((\xi, \phi),\, (\xi', \phi')\bigr)
+            = \sqrt{\,\lambda^{2} \lVert \xi - \xi' \rVert^{2} + \lVert \phi - \phi' \rVert^{2}\,}
+            \end{equation}
+          </div>
+          <div id="eq-6">
+            \begin{equation}
+            \mathcal{E}_{\lambda}(C^{*}, S^{*})
+            = 2\,\mathbb{E}\,\mathcal{D}_{\lambda}(c, s)
+            - \mathbb{E}\,\mathcal{D}_{\lambda}(c, \tilde{c})
+            - \mathbb{E}\,\mathcal{D}_{\lambda}(s, \tilde{s})
+            \end{equation}
+          </div>
+          <div id="eq-7">
+            \begin{equation}
+            \boldsymbol{\tau}^{\star} = \boldsymbol{\tau}(h^{\star}),
+            \qquad
+            h^{\star} = \arg\min_{h \in \mathcal{H}_B} \widehat{\mathcal{E}}_{\lambda}\bigl(\nu^{\star};\, \boldsymbol{\tau}(h)\bigr)
+            \end{equation}
+          </div>
         </div>
       </div>
     </section>
@@ -203,7 +217,7 @@
           <p>
             We evaluate GYS against the default uniform sampling schedule on the RoboTwin 2.0 benchmark across
             50 manipulation tasks, using π<sub>0.5</sub> and GR00T N1.7 fine-tuned on the official clean
-            datasets. As summarized in Figure 1(d) and Table 1, GYS
+            datasets. As summarized in <a class="paper-ref" href="#figure-1">Figure&nbsp;1(d)</a> and Table 1, GYS
             consistently outperforms the uniform schedule at every tested budget for both policies, raising the
             mean closed-loop success rate across budgets by 2.8 percentage points for both π<sub>0.5</sub>
             (67.5% &rarr; 70.3%) and GR00T N1.7 (49.2% &rarr; 52.0%). For GR00T N1.7, GYS also prevents the
