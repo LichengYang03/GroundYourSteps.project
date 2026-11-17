@@ -126,17 +126,17 @@
           demonstrated action chunks \(y_m\). Let \(\xi(o)\) denote the observation summary from the backbone,
           and let \(p^{\boldsymbol{\tau}}_{\xi}\) and \(q_{\xi}\) denote the generated and demonstrated
           action-chunk distributions conditioned on \(\xi\). Ideally, the schedule should align these two
-          conditional distributions (Eq.&nbsp;\eqref{eq:target}). To suppress schedule-invariant offsets
+          conditional distributions (Eq.&nbsp;(1)). To suppress schedule-invariant offsets
           between the frozen policy and demonstrations, GYS transforms each chunk through a <em>truncated
           fractional-difference operator</em> \(\Phi_{\nu}\) of differencing order \(\nu\) along each arm
           joint&rsquo;s action sequence, yielding the transformed target for \(X \sim p^{\boldsymbol{\tau}}_{\xi}\)
-          and \(Y \sim q_{\xi}\) (Eq.&nbsp;\eqref{eq:target-phi}).
+          and \(Y \sim q_{\xi}\) (Eq.&nbsp;(2)).
         </p>
         <div class="math-block">
-          \begin{equation}\label{eq:target}
+          \begin{equation}
           p^{\boldsymbol{\tau}}_{\xi} = q_{\xi} \qquad \text{for almost every } \xi
           \end{equation}
-          \begin{equation}\label{eq:target-phi}
+          \begin{equation}
           \operatorname{Law}\bigl(\Phi_{\nu}(X) \mid \xi\bigr)
           = \operatorname{Law}\bigl(\Phi_{\nu}(Y) \mid \xi\bigr)
           \qquad \text{for almost every } \xi
@@ -148,18 +148,18 @@
           \(X, X' \sim p^{\boldsymbol{\tau}}_{\xi}\) alongside the demonstration \(Y \sim q_{\xi}\) at each
           observation and compares two transformed pairwise-difference distributions, differences of a generated
           chunk against a demonstration and differences of two independent generated chunks against each other
-          (Eq.&nbsp;\eqref{eq:pairwise-laws}). GYS pairs each difference with its observation summary
+          (Eq.&nbsp;(3)). GYS pairs each difference with its observation summary
           \(\xi(o)\), forming joint samples \(c\) and \(s\) with population distributions \(C^{*}\) and
-          \(S^{*}\) (Eq.&nbsp;\eqref{eq:joint}). \(C^{*}\) and \(S^{*}\) coincide if and only if the
+          \(S^{*}\) (Eq.&nbsp;(4)). \(C^{*}\) and \(S^{*}\) coincide if and only if the
           transformed generated and demonstrated action distributions match.
         </p>
         <div class="math-block">
-          \begin{equation}\label{eq:pairwise-laws}
+          \begin{equation}
           C_{\xi} = \operatorname{Law}\bigl(\Phi_{\nu}(X - Y) \mid \xi\bigr),
           \qquad
           S_{\xi} = \operatorname{Law}\bigl(\Phi_{\nu}(X - X') \mid \xi\bigr)
           \end{equation}
-          \begin{equation}\label{eq:joint}
+          \begin{equation}
           c = \bigl(\xi(o),\, \Phi_{\nu}(X - Y)\bigr) \sim C^{*},
           \qquad
           s = \bigl(\xi(o),\, \Phi_{\nu}(X - X')\bigr) \sim S^{*}
@@ -167,27 +167,27 @@
         </div>
         <p>
           GYS measures the discrepancy between \(C^{*}\) and \(S^{*}\) under a weighted Euclidean metric
-          \(\mathcal{D}_{\lambda}\) with observation weight \(\lambda > 0\) (Eq.&nbsp;\eqref{eq:metric}) and
+          \(\mathcal{D}_{\lambda}\) with observation weight \(\lambda > 0\) (Eq.&nbsp;(5)) and
           minimizes their energy distance \(\mathcal{E}_{\lambda}(C^{*}, S^{*})\) over independent copies
-          \(\tilde{c} \sim C^{*}\) and \(\tilde{s} \sim S^{*}\) (Eq.&nbsp;\eqref{eq:energy}), as illustrated in
+          \(\tilde{c} \sim C^{*}\) and \(\tilde{s} \sim S^{*}\) (Eq.&nbsp;(6)), as illustrated in
           Figure 1(c). Minimizing the energy distance \(\widehat{\mathcal{E}}_{\lambda}\) on the calibration
           set at a calibrated differencing order \(\nu^{\star}\) over \(h \in \mathcal{H}_B\), GYS delivers a
-          non-uniform schedule \(\boldsymbol{\tau}^{\star}\) (Eq.&nbsp;\eqref{eq:loss}, Figure 1(b)). At
+          non-uniform schedule \(\boldsymbol{\tau}^{\star}\) (Eq.&nbsp;(7), Figure 1(b)). At
           deployment, \(\boldsymbol{\tau}^{\star}\) replaces the uniform grid and raises the success rate
           across budgets without changing the policy weights \(\theta\) or the inference cost (Figure 1(d)).
         </p>
         <div class="math-block">
-          \begin{equation}\label{eq:metric}
+          \begin{equation}
           \mathcal{D}_{\lambda}\bigl((\xi, \phi),\, (\xi', \phi')\bigr)
           = \sqrt{\,\lambda^{2} \lVert \xi - \xi' \rVert^{2} + \lVert \phi - \phi' \rVert^{2}\,}
           \end{equation}
-          \begin{equation}\label{eq:energy}
+          \begin{equation}
           \mathcal{E}_{\lambda}(C^{*}, S^{*})
           = 2\,\mathbb{E}\,\mathcal{D}_{\lambda}(c, s)
           - \mathbb{E}\,\mathcal{D}_{\lambda}(c, \tilde{c})
           - \mathbb{E}\,\mathcal{D}_{\lambda}(s, \tilde{s})
           \end{equation}
-          \begin{equation}\label{eq:loss}
+          \begin{equation}
           \boldsymbol{\tau}^{\star} = \boldsymbol{\tau}(h^{\star}),
           \qquad
           h^{\star} = \arg\min_{h \in \mathcal{H}_B} \widehat{\mathcal{E}}_{\lambda}\bigl(\nu^{\star};\, \boldsymbol{\tau}(h)\bigr)
