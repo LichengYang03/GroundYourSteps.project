@@ -52,6 +52,11 @@
     </section>
     <section id="introduction">
       <h2>Introduction</h2>
+      <p class="question-callout">
+        More steps don&rsquo;t always help&mdash;and where you step matters just as much.
+        Under a fixed NFE budget, can we unlock higher closed-loop success from a frozen flow matching policy
+        purely by choosing <strong>when</strong> to evaluate?
+      </p>
       <div class="prose">
         <p>
           Flow matching robot policies generate action chunks by integrating a learned marginal velocity field
@@ -70,6 +75,17 @@
           schedule as a direct lever on both the generated action distribution and task success, motivating a
           demonstration-grounded criterion for choosing evaluation times at each fixed budget.
         </p>
+      </div>
+      <figure class="teaser">
+        <a href="./assets/fig1.png" aria-label="Open Figure 1 at full resolution">
+          <img width="2699" height="1834" src="./assets/fig1.png" alt="Figure 1. Ground Your Steps overview showing how sampling schedules affect robot policy performance.">
+        </a>
+      </figure>
+    </section>
+    <section id="method">
+      <h2>Method</h2>
+      <div class="figure-slot" aria-hidden="true"></div>
+      <div class="prose">
         <p>
           We propose <strong>Ground Your Steps (GYS)</strong>, a training-free method that optimizes the Euler
           sampling schedule of a frozen flow matching policy offline using only demonstration chunks and no
@@ -85,21 +101,6 @@
           to three real-world manipulation tasks—all with model weights and inference cost untouched.
         </p>
       </div>
-      <p class="question-callout">
-        <em>More steps don&rsquo;t always help&mdash;and where you step matters just as much.</em>
-        Under a fixed NFE budget, can we unlock higher closed-loop success from a frozen flow matching policy
-        purely by choosing <strong>when</strong> to evaluate?
-      </p>
-      <figure class="teaser">
-        <a href="./assets/fig1.png" aria-label="Open Figure 1 at full resolution">
-          <img width="2699" height="1834" src="./assets/fig1.png" alt="Figure 1. Ground Your Steps overview showing how sampling schedules affect robot policy performance.">
-        </a>
-      </figure>
-    </section>
-    <section id="method">
-      <h2>Method</h2>
-      <div class="figure-slot" aria-hidden="true"></div>
-      <div class="prose"></div>
     </section>
     <section id="experiments">
       <h2>Experiments</h2>
