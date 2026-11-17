@@ -1,10 +1,9 @@
 (() => {
   const entry = document.getElementById("bibtex-entry");
-  const button = document.getElementById("copy-bibtex");
   if (!entry.textContent.trim()) return;
 
-  button.disabled = false;
-  button.addEventListener("click", async () => {
+  async function copyEntry(event) {
+    const button = event.currentTarget;
     try {
       await navigator.clipboard.writeText(entry.textContent.trim());
       button.textContent = "Copied";
@@ -16,5 +15,10 @@
       selection.addRange(range);
       button.textContent = "Copy selection";
     }
-  });
+  }
+
+  for (const button of document.querySelectorAll(".copy-bibtex")) {
+    button.disabled = false;
+    button.addEventListener("click", copyEntry);
+  }
 })();

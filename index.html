@@ -4,11 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ground Your Steps: Optimizing Sampling Schedules in Flow Matching Robot Policies</title>
-  <link rel="stylesheet" href="./style.css?v=17">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans&amp;display=swap">
-  <script src="./experiment-tabs.js" defer></script>
+  <link rel="stylesheet" href="./style.css?v=18">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=Google+Sans&amp;display=swap">
+  <script src="./experiment-tabs.js?v=2" defer></script>
 </head>
-<body>
+<body id="top">
+  <nav class="site-nav" aria-label="Page navigation">
+    <div class="nav-inner">
+      <a class="nav-brand" href="#top">Ground Your Steps</a>
+      <div class="nav-links">
+        <a href="#abstract">Abstract</a>
+        <a href="#introduction">Introduction</a>
+        <a href="#method">Method</a>
+        <a href="#experiments">Experiments</a>
+        <a href="#citation">Citation</a>
+      </div>
+    </div>
+  </nav>
   <main class="paper">
     <header class="publication">
       <h1>
@@ -30,7 +42,10 @@
         <img class="casia-logo" src="./assets/casia.png" alt="Institute of Automation, Chinese Academy of Sciences" width="2172" height="724">
         <img src="./assets/d-robotics.png?v=2" alt="D-Robotics" width="750" height="150">
       </div>
-      <a class="code" href="https://github.com/LichengYang03/GroundYourSteps"><img src="./assets/github.svg" alt="" width="16" height="16"> Code</a>
+      <div class="publication-actions">
+        <a class="code" href="https://github.com/LichengYang03/GroundYourSteps"><img src="./assets/github.svg" alt="" width="16" height="16"> Code</a>
+        <button class="copy-bibtex" type="button" disabled>Copy BibTeX</button>
+      </div>
     </header>
 
     <section id="abstract">
@@ -377,11 +392,11 @@
     <section id="citation" aria-labelledby="citation-title">
       <div class="citation-heading">
         <h2 id="citation-title">Citation</h2>
-        <button id="copy-bibtex" type="button" disabled>Copy BibTeX</button>
+        <button class="copy-bibtex" type="button" disabled>Copy BibTeX</button>
       </div>
       <pre class="citation-box"><code id="bibtex-entry"></code></pre>
     </section>
   </main>
-  <script src="./citation.js"></script>
+  <script src="./citation.js?v=2"></script>
 </body>
 </html>

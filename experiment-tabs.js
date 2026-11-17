@@ -38,8 +38,8 @@
   function selectFromHash() {
     const target = document.getElementById(location.hash.slice(1));
     const index = panels.findIndex((panel) => panel.contains(target));
-    select(index < 0 ? 0 : index);
     if (index >= 0) {
+      select(index);
       const anchor = target === panels[index] ? section : target;
       anchor.scrollIntoView();
     }
@@ -66,6 +66,7 @@
     });
   });
 
+  select(0);
   selectFromHash();
   window.addEventListener("hashchange", selectFromHash);
 })();

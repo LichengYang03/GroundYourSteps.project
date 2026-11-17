@@ -12,11 +12,38 @@
   --body: "Myriad Pro", sans-serif;
   font: 400 16px/1.5 var(--body);
   --display: "Google Sans", var(--body);
+  --heading: "Fraunces", Georgia, serif;
   --frame: #dbdbdb;
 }
 * { box-sizing: border-box; }
 body, h1, h2, h3, p, figure { margin: 0; }
 .paper > header, .paper > section { padding: 48px max(24px, calc((100% - 960px) / 2)); }
+html { scroll-padding-top: 60px; }
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: rgba(255, 255, 255, .94);
+  backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid #e6e6e6;
+  font-family: var(--heading);
+}
+.nav-inner {
+  max-width: 1008px;
+  margin: 0 auto;
+  padding: 0 24px;
+  min-height: 59px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.site-nav a { color: #222; text-decoration: none; }
+.site-nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.nav-brand { font-size: 19px; font-weight: 700; }
+.nav-links { display: flex; flex-wrap: wrap; gap: 2px 18px; font-size: 15px; font-weight: 600; }
+.nav-links a { padding-block: 5px; }
+.publication-actions { display: flex; justify-content: center; align-items: stretch; gap: 8px; }
 .publication { text-align: center; font-family: var(--display); }
 h1 { margin-bottom: 24px; font-size: 40px; font-weight: 600; line-height: 1.125; text-wrap: balance; }
 h1 span { display: block; }
@@ -43,7 +70,7 @@ sup { color: #363636; font-size: .68em; line-height: 0; font-weight: 400; }
 a:focus-visible { outline: 3px solid #3273dc; outline-offset: 4px; }
 .paper > section { font-size: 1.125rem; }
 .paper > section:nth-of-type(odd) { background: #f5f5f5; }
-h2, h3 { text-align: center; font-family: var(--display); font-weight: 600; line-height: 1.2; }
+h2, h3 { text-align: center; font-family: var(--heading); font-weight: 700; line-height: 1.2; }
 h2 { margin-bottom: 20px; font-size: 30px; letter-spacing: -.02em; }
 h3 { margin: 24px 0 12px; font-size: 22px; }
 .prose, .question-callout {
@@ -139,8 +166,8 @@ figcaption { font-size: 1rem; }
 .results-table .std { margin-left: .14em; font-size: .8125em; font-weight: 400; color: #58676f; }
 .results-table sub { font-size: .72em; line-height: 0; }
 .citation-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
-.citation-heading h2 { margin: 0; text-align: left; font: 600 28px/1.125 var(--body); }
-.citation-heading button {
+.citation-heading h2 { margin: 0; text-align: left; }
+.copy-bibtex {
   padding: 7px 16px;
   border: 1px solid var(--frame);
   border-radius: 999px;
@@ -149,7 +176,7 @@ figcaption { font-size: 1rem; }
   font: 400 16px/1.5 var(--body);
   cursor: pointer;
 }
-.citation-heading button:disabled { color: #696969; cursor: default; }
+.copy-bibtex:disabled { color: #696969; cursor: default; }
 .citation-box {
   min-height: 76px;
   margin: 0;
@@ -172,6 +199,9 @@ figcaption { font-size: 1rem; }
   .experiment-tabs button { padding-inline: 2px; font-size: .75rem; letter-spacing: -.02em; }
 }
 @media (max-width: 650px) {
+  html { scroll-padding-top: 100px; }
+  .nav-inner { flex-direction: column; align-items: flex-start; gap: 0; padding: 6px 18px; }
+  .nav-links { gap: 0 12px; }
   .paper > header, .paper > section { padding: 32px 18px; }
   h1 { font-size: clamp(30px, 7vw, 40px); }
   h2 { font-size: 26px; }
