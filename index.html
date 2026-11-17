@@ -249,9 +249,11 @@
       <section id="real-world">
         <h3>Real-world Experiments</h3>
         <figure class="results" id="real-world-results">
-          <figcaption id="robot-results-title"><strong>Table 2.</strong> Closed-loop success rate (%) on three ROKAE AR5 tasks</figcaption>
+          <figcaption id="robot-results-title"><strong>Table 2.</strong> Closed-loop success rate (%) on three ROKAE AR5 tasks.
+            Both schedules use the same 100-episode benchmark.
+            Avg. is the mean across PaP, SbC, and SaC at each NFE budget. Gain is GYS minus Uniform, in percentage points.</figcaption>
           <div class="table-wrap" role="region" aria-labelledby="robot-results-title" tabindex="0">
-            <table class="results-table" aria-labelledby="robot-results-title" aria-describedby="robot-results-note">
+            <table class="results-table" aria-labelledby="robot-results-title">
               <colgroup><col class="policy-col"><col class="schedule-col"></colgroup>
               <colgroup span="4"></colgroup>
               <colgroup span="4"></colgroup>
@@ -347,8 +349,6 @@
               </tbody>
             </table>
           </div>
-          <p class="table-note" id="robot-results-note">Both schedules use the same 100-episode benchmark.
-            Avg. is the mean across PaP, SbC, and SaC at each NFE budget. Gain is GYS minus Uniform, in percentage points.</p>
         </figure>
         <div class="demo-grid">
           <figure>

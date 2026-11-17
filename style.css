@@ -106,7 +106,6 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
 .results-table .gain-row .nonpositive { color: #56646c; }
 .results-table .std { margin-left: .14em; font-size: .77em; font-weight: 400; color: #58676f; }
 .results-table sub { font-size: .72em; line-height: 0; }
-.results .table-note { margin-top: 10px; font-size: .9375rem; line-height: 1.45; color: #58636a; }
 @media (max-width: 790px) {
   .results-table .policy-col { width: 96px; }
   .results-table .schedule-col { width: 102px; }
