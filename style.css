@@ -37,7 +37,7 @@ a:focus-visible { outline: 3px solid #3273dc; outline-offset: 4px; }
 h2, h3 { text-align: center; font-family: var(--display); font-weight: 600; line-height: 1.2; }
 h2 { margin-bottom: 20px; font-size: 30px; letter-spacing: -.02em; }
 h3 { margin: 24px 0 12px; font-size: 22px; }
-.prose { text-align: justify; color: #414141; }
+.prose { text-align: justify; color: #595959; }
 .prose sub { line-height: 0; }
 .prose p + p { margin-top: 1em; }
 .prose:empty { min-height: 3em; }
