@@ -27,6 +27,16 @@ sup { color: #363636; font-size: .68em; line-height: 0; font-weight: 400; }
 .roles { margin: 6px 0 20px; }
 .roles span { white-space: nowrap; }
 .roles span + span { margin-left: .7em; }
+.affiliation-logos {
+  display: grid;
+  grid-template-columns: minmax(0, 250px) minmax(0, 150px);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 32px);
+  margin: 0 auto 20px;
+}
+.affiliation-logos img { display: block; width: 100%; height: auto; }
+.affiliation-logos .casia-logo { height: auto; aspect-ratio: 5 / 1; object-fit: cover; }
 .code { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 7px 20px; border-radius: 999px; color: white; background: #363636; font-size: 16px; text-decoration: none; }
 .code:hover { background: #292929; }
 a:focus-visible { outline: 3px solid #3273dc; outline-offset: 4px; }
