@@ -1,15 +1,7 @@
-@font-face {
-  font-family: "Myriad Pro";
-  src: local("Myriad Pro"), local("MyriadPro-Regular"),
-       url("https://georedteam.github.io/static/css/fonts/MyriadPro-Regular.woff") format("woff");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
 :root {
   color: #363636;
   background: white;
-  font: 16px/1.5 "Myriad Pro", "Open Sans", Arial, sans-serif;
+  font: 16px/1.5 "Inter", Arial, sans-serif;
   --display: "Google Sans", system-ui, sans-serif;
   --frame: #dbdbdb;
 }
@@ -62,7 +54,8 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
 .teaser { max-width: 800px; margin: 28px auto 0; }
 .teaser a { display: block; cursor: zoom-in; }
 .teaser img { display: block; width: 100%; height: auto; }
-.teaser figcaption { margin-top: 10px; text-align: center; color: #555; font-size: 0.95rem; line-height: 1.45; }
+figcaption { font-size: 1rem; }
+.teaser figcaption { margin-top: 10px; text-align: center; color: #555; line-height: 1.45; }
 .teaser img, .figure-slot { border: 1px solid var(--frame); border-radius: 6px; background: white; }
 .figure-slot { aspect-ratio: 4.4; margin: 16px auto; }
 .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 24px 16px; }
@@ -96,7 +89,7 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
 }
 .experiment-tabs button:focus-visible { outline: 2px solid #209cee; outline-offset: 2px; }
 .results { margin: 28px 0 24px; }
-.results figcaption { margin-bottom: 12px; font-size: 1.125rem; line-height: 1.4; }
+.results figcaption { margin-bottom: 12px; line-height: 1.4; }
 .results figcaption strong { margin-right: .25em; }
 .table-wrap { overflow-x: auto; }
 .table-wrap:focus-visible { outline: 2px solid #3273dc; outline-offset: 2px; }
@@ -107,7 +100,8 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
   border-collapse: separate;
   border-spacing: 0;
   border-block: 2px solid #445561;
-  font: 400 15px/1.4 system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.4;
   font-variant-numeric: tabular-nums;
   color: #29363e;
 }
@@ -131,7 +125,7 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
 #real-world-results .results-table td:is(:nth-last-child(4), :nth-last-child(5)),
 #real-world-results .results-table thead tr:last-child th:is(:nth-last-child(4), :nth-last-child(5)) { border-left: 1px solid #d0dade; }
 .results-table .gain-row .nonpositive { color: #56646c; }
-.results-table .std { margin-left: .14em; font-size: .77em; font-weight: 400; color: #58676f; }
+.results-table .std { margin-left: .14em; font-size: .8125em; font-weight: 400; color: #58676f; }
 .results-table sub { font-size: .72em; line-height: 0; }
 @media (max-width: 790px) {
   .results-table .policy-col { width: 96px; }
