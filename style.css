@@ -82,9 +82,12 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
 .prose sub { line-height: 0; }
 .prose p + p { margin-top: 1em; }
 .prose:empty { min-height: 3em; }
-#method .prose > p { line-height: 1.7; }
-/* MathJax sets the container's font size inline. */
-#method p mjx-container[jax="CHTML"] { font-size: 1em !important; }
+#method p mjx-container[jax="CHTML"] {
+  display: inline-block;
+  /* Let scripts use the paragraph's leading while keeping the math on its baseline. */
+  margin-block: -0.18em;
+  font-size: 1em !important;
+}
 .math-block {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -92,7 +95,10 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
   margin-block: 20px;
   padding-block: 4px;
   overflow-x: auto;
+  overflow-y: hidden;
 }
+/* Keep the screen-reader MathML from enlarging the horizontal scroll area. */
+.math-block mjx-assistive-mml { max-height: 1px; }
 #method .math-block mjx-container[display="true"] { margin: 0; }
 .question-callout {
   margin: 0 auto 24px;
