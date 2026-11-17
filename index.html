@@ -140,15 +140,12 @@
             We evaluate GYS against the default uniform sampling schedule on the RoboTwin 2.0 benchmark across
             50 manipulation tasks, using π<sub>0.5</sub> and GR00T N1.7 fine-tuned on the official clean
             datasets. For each task and NFE budget <em>B</em> &isin; {3, 4, 5, 6, 8, 10}, we run four
-            independent evaluation rounds of 100 episodes each.
-          </p>
-          <p>
-            As summarized in Figure 1(d) and Table 1, GYS consistently
-            outperforms the uniform schedule at every tested budget for both policies, raising the mean
-            closed-loop success rate across budgets by 2.8 percentage points for both
-            π<sub>0.5</sub> (67.5% &rarr; 70.3%) and GR00T N1.7 (49.2% &rarr; 52.0%). For GR00T N1.7, GYS also
-            prevents the sharp degradation of uniform sampling at larger budgets, delivering gains of +5.0
-            percentage points at <em>B</em> = 8 and +4.1 percentage points at <em>B</em> = 10.
+            independent evaluation rounds of 100 episodes each. As summarized in Figure 1(d) and Table 1, GYS
+            consistently outperforms the uniform schedule at every tested budget for both policies, raising the
+            mean closed-loop success rate across budgets by 2.8 percentage points for both π<sub>0.5</sub>
+            (67.5% &rarr; 70.3%) and GR00T N1.7 (49.2% &rarr; 52.0%). For GR00T N1.7, GYS also prevents the
+            sharp degradation of uniform sampling at larger budgets, delivering gains of +5.0 percentage points
+            at <em>B</em> = 8 and +4.1 percentage points at <em>B</em> = 10.
           </p>
         </div>
 
