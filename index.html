@@ -157,9 +157,11 @@
         </div>
 
         <figure class="results" id="simulation-results">
-          <figcaption id="results-title"><strong>Table 1.</strong> Closed-loop success rate (%) on 50 RoboTwin 2.0 tasks</figcaption>
+          <figcaption id="results-title"><strong>Table 1.</strong> Closed-loop success rate (%) on 50 RoboTwin 2.0 tasks.
+            For each NFE budget <em>B</em> &isin; {3, 4, 5, 6, 8, 10}, values are the mean &plusmn; std over four
+            evaluation rounds (100 episodes per task per round). Avg. reports the mean and std across the six budgets.</figcaption>
           <div class="table-wrap" role="region" aria-labelledby="results-title" tabindex="0">
-            <table class="results-table" aria-labelledby="results-title" aria-describedby="results-note">
+            <table class="results-table" aria-labelledby="results-title">
               <colgroup><col class="policy-col"><col class="schedule-col"><col span="7"></colgroup>
               <thead>
                 <tr>
@@ -242,9 +244,6 @@
               </tbody>
             </table>
           </div>
-          <p class="table-note" id="results-note">Results at <em>B</em> &isin; {3, 4, 5, 6, 8, 10} are reported as
-            mean &plusmn; std over four evaluation rounds (100 episodes per task per round). Avg. reports the mean
-            and std across the six budgets.</p>
         </figure>
       </section>
       <section id="real-world">
