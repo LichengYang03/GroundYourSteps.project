@@ -138,6 +138,29 @@ figcaption { font-size: 1rem; }
 .results-table .gain-row .nonpositive { color: #56646c; }
 .results-table .std { margin-left: .14em; font-size: .8125em; font-weight: 400; color: #58676f; }
 .results-table sub { font-size: .72em; line-height: 0; }
+.citation-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.citation-heading h2 { margin: 0; text-align: left; font: 600 28px/1.125 var(--body); }
+.citation-heading button {
+  padding: 7px 16px;
+  border: 1px solid var(--frame);
+  border-radius: 999px;
+  background: white;
+  color: #363636;
+  font: 400 16px/1.5 var(--body);
+  cursor: pointer;
+}
+.citation-heading button:disabled { color: #696969; cursor: default; }
+.citation-box {
+  min-height: 76px;
+  margin: 0;
+  padding: 18px 20px;
+  overflow-x: auto;
+  border: 1px solid var(--frame);
+  border-radius: 6px;
+  background: white;
+  font: 400 14px/1.5 monospace;
+}
+.citation-box code { font: inherit; }
 @media (max-width: 790px) {
   .results-table .policy-col { width: 96px; }
   .results-table .schedule-col { width: 102px; }
