@@ -67,9 +67,9 @@
           from Gaussian noise to actions under a finite budget of neural function evaluations (NFEs). Because
           finite-step integration only approximates the continuous flow, the generated action distribution can
           deviate from the demonstrated distribution due to two key factors:
-          (i) <strong>trajectory curvature</strong>, where averaging differently directed path velocities creates
+          (i) <em>trajectory curvature</em>, where averaging differently directed path velocities creates
           curved marginal trajectories that coarse steps fail to resolve; and
-          (ii) the <strong>Lipschitz window</strong>, where the marginal field becomes highly sensitive near the
+          (ii) the <em>Lipschitz window</em>, where the marginal field becomes highly sensitive near the
           action endpoint and amplifies small integration errors.
           In closed-loop evaluations across 50 RoboTwin 2.0 tasks <strong>(a)</strong>, we observe that uniform
           sampling exhibits non-monotonic performance as the NFE budget <em>B</em> increases. Specifically, success
