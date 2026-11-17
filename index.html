@@ -79,29 +79,25 @@
       </p>
       <div class="prose">
         <p>
-          Flow matching vision&ndash;language&ndash;action (VLA) policies generate action chunks by integrating a
-          learned approximation to the marginal velocity field from Gaussian noise to actions under a finite
-          budget of neural function evaluations (NFEs). Because finite-step integration only approximates the
-          continuous flow, the generated action distribution can deviate from the demonstrated distribution due
-          to two mechanisms:
-          (i) <em>trajectory curvature</em>, where averaging differently directed path velocities creates curved
-          marginal trajectories that coarse integration steps fail to resolve; and
-          (ii) the <em>Lipschitz window</em>, where the marginal field becomes highly sensitive to the action
-          state near the action endpoint and amplifies small deviations.
-          In closed-loop evaluations across 50 RoboTwin 2.0 tasks (Figure 1(a)), uniform
-          sampling exhibits non-monotonic performance as the NFE budget <em>B</em> increases: success peaks at
-          <em>B</em> = 4 for π<sub>0.5</sub> and <em>B</em> = 6 for GR00T N1.7, and then declines at larger
-          budgets. At a fixed budget of <em>B</em> = 5, a moderate bias toward the noise start
-          (<em>s</em> = 0.25) outperforms the uniform grid (<em>s</em> = 0.5), whereas concentrating nodes near
-          either endpoint lowers success.
+          Flow matching vision-language-action (VLA) policies generate action chunks by integrating a learned
+          marginal velocity field from Gaussian noise to actions under a finite budget of neural function
+          evaluations (NFEs). Under finite-step integration, the generated action distribution can deviate
+          from the demonstrated distribution for two reasons. Averaging differently directed path velocities
+          creates curved marginal trajectories that coarse steps fail to resolve, while near the action
+          endpoint the marginal field becomes sensitive to small perturbations and amplifies integration
+          errors. In closed-loop evaluations across 50 RoboTwin 2.0 tasks (Figure 1(a)), uniform sampling
+          exhibits non-monotonic performance as the NFE budget <em>B</em> increases. At a fixed budget of
+          <em>B</em> = 5, shifting sampling nodes moderately toward the noise start (<em>s</em> = 0.25)
+          outperforms the uniform grid (<em>s</em> = 0.5), whereas pushing nodes too close to either endpoint
+          degrades success.
         </p>
         <p>
-          Together, these observations identify the sampling schedule as a direct lever on both the generated
-          action distribution and closed-loop task success. We propose Ground Your Steps (GYS),
-          a training-free method that grounds the sampling schedule in task demonstrations. By optimizing a
-          distribution-matching objective offline over candidate schedules for each task and NFE budget, GYS
-          brings the generated action distribution closer to the demonstrations and improves closed-loop success
-          without modifying policy weights or adding inference cost.
+          These findings show that when a policy evaluates matters as much as how many steps it takes, making
+          the sampling schedule a direct lever on task success. We propose Ground Your Steps (GYS), a
+          training-free method that grounds the sampling schedule in task demonstrations. By optimizing a
+          distribution-matching objective offline for each task and NFE budget, GYS aligns the generated
+          action distribution with the demonstrations and improves closed-loop success without modifying
+          policy weights or adding inference cost.
         </p>
       </div>
       <figure class="teaser">
@@ -115,34 +111,25 @@
       <h2>Method</h2>
       <div class="prose">
         <p>
-          Ground Your Steps (GYS) optimizes the sampling schedule of a frozen flow matching
-          policy offline using only a calibration set of demonstration chunks and no environment interaction.
-          With policy weights and the NFE budget fixed, GYS targets agreement between the generated and
-          demonstrated conditional action-chunk distributions at each observation. Because raw action chunks
-          can carry schedule-invariant offsets between a frozen policy and demonstrations, GYS compares chunks
-          through a <em>truncated fractional-difference operator</em> along each arm joint&rsquo;s action
-          sequence over a 10-step horizon window. Generalizing first- and second-order finite differences at a
-          task- and budget-calibrated differencing order, this operator suppresses shared offsets and emphasizes
-          within-chunk motion dynamics.
+          Ground Your Steps (GYS) is a training-free method that optimizes the sampling schedule of a frozen
+          flow matching policy offline for each task and NFE budget, using only a calibration set of
+          demonstration chunks. To suppress schedule-invariant offsets between the frozen policy and
+          demonstrations, GYS transforms each action chunk through a <em>truncated fractional-difference
+          operator</em> along each arm joint&rsquo;s action sequence.
         </p>
         <p>
-          Since a calibration dataset provides only one demonstrated chunk per observation, the conditional
-          demonstrated distribution cannot be estimated directly. GYS resolves this by comparing two types of
-          transformed pairwise differences computed at the same observation with independent noise draws:
-          generated&ndash;demonstrated differences and generated&ndash;generated differences
-          (Figure 1(c)). Under the stated identifiability assumptions, their distributions
-          coincide exactly when the transformed generated and demonstrated action distributions match. By pairing
-          each difference sample with a mean-pooled summary of the backbone&rsquo;s observation representation,
-          GYS preserves conditional alignment when pooling across the calibration set and scores candidate
-          schedules using their empirical energy distance.
+          Because a calibration dataset provides only one demonstrated chunk per observation, the conditional
+          demonstrated distribution cannot be estimated directly. GYS instead compares two types of
+          transformed pairwise differences at each observation, differences of a generated chunk against a
+          demonstration and differences of two independent generated chunks against each other (Figure 1(c)).
+          These two pairwise-difference distributions coincide exactly when the transformed generated and
+          demonstrated action distributions match.
         </p>
         <p>
-          Using a fixed calibration set and shared noise draws, GYS parameterizes positive step widths and
-          searches for the lowest-scoring schedule via particle swarm optimization without backpropagating
-          through the policy. The resulting schedules adapt to each task and budget while placing fewer interior
-          nodes near the sensitive action endpoint (Figure 1(b)). The optimized schedule
-          replaces the uniform grid at deployment and raises the success rate across budgets, without changing
-          the policy weights or the inference cost (Figure 1(d)).
+          GYS minimizes the energy distance between these two pairwise-difference distributions and delivers a
+          non-uniform schedule (Figure 1(b)). At deployment, the optimized schedule replaces the uniform grid
+          and raises the success rate across budgets without changing the policy weights or the inference cost
+          (Figure 1(d)).
         </p>
       </div>
     </section>
