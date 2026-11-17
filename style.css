@@ -37,8 +37,19 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
 .prose { text-align: justify; color: #414141; }
 #abstract .prose { font-size: 1.25rem; }
 .prose sub { line-height: 0; }
+.prose p + p { margin-top: 1em; }
 .prose:empty { min-height: 3em; }
-.teaser { margin-top: 28px; }
+.question-callout {
+  margin: 28px auto 0;
+  padding: 16px 22px;
+  border-left: 4px solid #209cee;
+  border-radius: 6px;
+  background: #eef6fc;
+  color: #2c3e50;
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+.teaser { margin-top: 18px; }
 .teaser a { display: block; cursor: zoom-in; }
 .teaser img { display: block; width: 100%; height: auto; }
 .teaser img, .figure-slot { border: 1px solid var(--frame); border-radius: 6px; background: white; }

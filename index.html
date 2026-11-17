@@ -52,7 +52,44 @@
     </section>
     <section id="introduction">
       <h2>Introduction</h2>
-      <div class="prose"></div>
+      <div class="prose">
+        <p>
+          Flow matching robot policies generate action chunks by integrating a learned marginal velocity field
+          from Gaussian noise to actions under a finite budget of neural function evaluations (NFEs). Because
+          finite-step integration only approximates the continuous flow, the generated action distribution can
+          deviate from the demonstrated distribution due to two key factors:
+          (i) <strong>trajectory curvature</strong>, where averaging differently directed path velocities creates
+          curved marginal trajectories that coarse steps fail to resolve; and
+          (ii) the <strong>Lipschitz window</strong>, where the marginal field becomes highly sensitive near the
+          action endpoint and amplifies small integration errors.
+          In closed-loop evaluations across 50 RoboTwin 2.0 tasks <strong>(a)</strong>, we observe that uniform
+          sampling exhibits non-monotonic performance as the NFE budget <em>B</em> increases—peaking at
+          <em>B</em> = 4 for π<sub>0.5</sub> and <em>B</em> = 6 for GR00T N1.7 before degrading—and that at a
+          fixed budget (<em>B</em> = 5), a moderate bias toward the noise endpoint outperforms the uniform grid
+          while concentrating nodes near either endpoint hurts success. These observations identify the sampling
+          schedule as a direct lever on both the generated action distribution and task success, motivating a
+          demonstration-grounded criterion for choosing evaluation times at each fixed budget.
+        </p>
+        <p>
+          We propose <strong>Ground Your Steps (GYS)</strong>, a training-free method that optimizes the Euler
+          sampling schedule of a frozen flow matching policy offline using only demonstration chunks and no
+          environment interaction. To compare candidate schedules, GYS applies a 10-tap truncated
+          fractional-difference operator along each arm joint's action sequence and minimizes the joint energy
+          distance between generated–demonstrated (cross) and generated–generated (self) pairwise differences
+          computed from disjoint halves of a fixed noise bank, together with a masked backbone observation
+          summary <strong>(c)</strong>. Using a ring particle swarm over step widths after calibrating the
+          fractional order and observation weight, GYS places fewer interior nodes near the sensitive action
+          endpoint <strong>(b)</strong> and brings the generated distribution closer to the demonstrations.
+          Across 50 RoboTwin 2.0 tasks at 3 to 10 NFEs <strong>(d)</strong>, GYS raises mean closed-loop
+          success from 67.5% to 70.3% for π<sub>0.5</sub> and from 49.2% to 52.0% for GR00T N1.7, and transfers
+          to three real-world manipulation tasks—all with model weights and inference cost untouched.
+        </p>
+      </div>
+      <p class="question-callout">
+        <em>More steps don&rsquo;t always help&mdash;and where you step matters just as much.</em>
+        Under a fixed NFE budget, can we unlock higher closed-loop success from a frozen flow matching policy
+        purely by choosing <strong>when</strong> to evaluate?
+      </p>
       <figure class="teaser">
         <a href="./assets/fig1.png" aria-label="Open Figure 1 at full resolution">
           <img width="2699" height="1834" src="./assets/fig1.png" alt="Figure 1. Ground Your Steps overview showing how sampling schedules affect robot policy performance.">
