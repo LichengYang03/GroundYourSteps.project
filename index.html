@@ -121,15 +121,15 @@
           Because a calibration dataset provides only one demonstrated chunk per observation, the conditional
           demonstrated distribution cannot be estimated directly. GYS instead compares two types of
           transformed pairwise differences at each observation, differences of a generated chunk against a
-          demonstration and differences of two independent generated chunks against each other (Figure 1(c)).
-          These two pairwise-difference distributions coincide exactly when the transformed generated and
-          demonstrated action distributions match.
+          demonstration and differences of two independent generated chunks against each other. These two
+          pairwise-difference distributions coincide exactly when the transformed generated and demonstrated
+          action distributions match.
         </p>
         <p>
-          GYS minimizes the energy distance between these two pairwise-difference distributions and delivers a
-          non-uniform schedule (Figure 1(b)). At deployment, the optimized schedule replaces the uniform grid
-          and raises the success rate across budgets without changing the policy weights or the inference cost
-          (Figure 1(d)).
+          GYS minimizes the energy distance between these two pairwise-difference distributions
+          (Figure 1(c)) and delivers a non-uniform schedule (Figure 1(b)). At deployment, the optimized
+          schedule replaces the uniform grid and raises the success rate across budgets without changing the
+          policy weights or the inference cost (Figure 1(d)).
         </p>
       </div>
     </section>
