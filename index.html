@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ground Your Steps: Optimizing Sampling Schedules in Flow Matching Robot Policies</title>
-  <link rel="stylesheet" href="./style.css?v=5">
+  <link rel="stylesheet" href="./style.css?v=6">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans&amp;family=Open+Sans:wght@400;600&amp;display=swap">
 </head>
 <body>
@@ -71,38 +71,58 @@
           curved marginal trajectories that coarse steps fail to resolve; and
           (ii) the <em>Lipschitz window</em>, where the marginal field becomes highly sensitive near the
           action endpoint and amplifies small integration errors.
-          In closed-loop evaluations across 50 RoboTwin 2.0 tasks <strong>(a)</strong>, we observe that uniform
-          sampling exhibits non-monotonic performance as the NFE budget <em>B</em> increases. Specifically, success
-          peaks at <em>B</em> = 4 for π<sub>0.5</sub> and <em>B</em> = 6 for GR00T N1.7, and then degrades at
-          larger budgets. At a fixed budget (<em>B</em> = 5), a moderate bias toward the noise endpoint outperforms
-          the uniform grid, whereas concentrating nodes near either endpoint hurts success. These observations
-          identify the sampling schedule as a direct lever on both the generated action distribution and task
-          success, motivating a demonstration-grounded criterion for choosing evaluation times at each fixed budget.
+          In closed-loop evaluations across 50 RoboTwin 2.0 tasks (<strong>Figure 1(a)</strong>), uniform
+          sampling exhibits non-monotonic performance as the NFE budget <em>B</em> increases: success peaks at
+          <em>B</em> = 4 for π<sub>0.5</sub> and <em>B</em> = 6 for GR00T N1.7, and then declines at larger
+          budgets. When we fix the budget at <em>B</em> = 5 and sweep a parametric grid from <em>s</em> = 0
+          (nodes clustered near the noise start &tau; = 0) to <em>s</em> = 1 (nodes clustered near the action
+          end &tau; = 1), placing too many nodes at either extreme lowers task success. By contrast, a schedule
+          with slightly denser steps in the early-to-mid flow and coarser steps near the action end
+          (<em>s</em> = 0.25) clearly outperforms the uniform grid (<em>s</em> = 0.5). Together, these results
+          show that where the policy evaluates along flow time directly shapes both the generated action
+          distribution and closed-loop success, motivating a principled, demonstration-grounded criterion to
+          optimize the sampling schedule for each task and NFE budget.
         </p>
       </div>
       <figure class="teaser">
         <a href="./assets/fig1.png" aria-label="Open Figure 1 at full resolution">
           <img width="2699" height="1834" src="./assets/fig1.png" alt="Figure 1. Ground Your Steps overview showing how sampling schedules affect robot policy performance.">
         </a>
+        <figcaption><strong>Figure 1.</strong> Empirical motivation, learned sampling schedules, pairwise-difference alignment, and closed-loop RoboTwin 2.0 benchmark gains of Ground Your Steps (GYS).</figcaption>
       </figure>
     </section>
     <section id="method">
       <h2>Method</h2>
-      <div class="figure-slot" aria-hidden="true"></div>
       <div class="prose">
         <p>
-          We propose <strong>Ground Your Steps (GYS)</strong>, a training-free method that optimizes the Euler
-          sampling schedule of a frozen flow matching policy offline using only demonstration chunks and no
-          environment interaction. To compare candidate schedules, GYS applies a 10-tap truncated
-          fractional-difference operator along each arm joint's action sequence and minimizes the joint energy
-          distance between generated–demonstrated (cross) and generated–generated (self) pairwise differences
-          computed from disjoint halves of a fixed noise bank, together with a masked backbone observation
-          summary <strong>(c)</strong>. Using a ring particle swarm over step widths after calibrating the
-          fractional order and observation weight, GYS places fewer interior nodes near the sensitive action
-          endpoint <strong>(b)</strong> and brings the generated distribution closer to the demonstrations.
-          Across 50 RoboTwin 2.0 tasks at 3 to 10 NFEs <strong>(d)</strong>, GYS raises mean closed-loop
-          success from 67.5% to 70.3% for π<sub>0.5</sub> and from 49.2% to 52.0% for GR00T N1.7, and transfers
-          to three real-world manipulation tasks while leaving model weights and inference cost untouched.
+          We propose <strong>Ground Your Steps (GYS)</strong>, a training-free method that optimizes the sampling
+          schedule of a frozen flow matching policy offline using only demonstration chunks and no environment
+          interaction. With policy weights and the NFE budget fixed, GYS aims to align the generated
+          action-chunk distribution with the demonstrated distribution at each observation. Because raw action
+          chunks can carry schedule-invariant offsets between a frozen policy and demonstrations, GYS compares
+          chunks through a truncated fractional-difference operator along each arm joint&rsquo;s action sequence,
+          which emphasizes within-chunk motion dynamics at a task-calibrated differencing order.
+        </p>
+        <p>
+          Since a calibration dataset provides only one demonstrated chunk per observation, the conditional
+          demonstrated distribution cannot be estimated directly. GYS resolves this by comparing two types of
+          transformed pairwise differences computed at the same observation with independent noise draws:
+          cross differences between a generated chunk and the demonstration, and self differences between two
+          independent generated chunks (<strong>Figure 1(c)</strong>). When the transformed generated and
+          demonstrated distributions match at each observation, these two pairwise-difference distributions
+          coincide exactly. By pairing each difference sample with a summary of the backbone&rsquo;s observation
+          representation, GYS preserves conditional alignment when pooling across the calibration set and scores
+          candidate schedules using their empirical energy distance.
+        </p>
+        <p>
+          Using a fixed calibration set and shared noise bank, GYS searches over valid step widths via particle
+          swarm optimization without backpropagating through the policy. The resulting schedules adapt to each
+          task and budget while placing fewer interior nodes near the sensitive action endpoint
+          (<strong>Figure 1(b)</strong>). At deployment, the optimized schedule directly replaces the default
+          uniform grid at the exact same NFE budget. Across 50 RoboTwin 2.0 tasks from 3 to 10 NFEs
+          (<strong>Figure 1(d)</strong>), GYS raises mean closed-loop success from 67.5% to 70.3% for
+          π<sub>0.5</sub> and from 49.2% to 52.0% for GR00T N1.7, and transfers to three real-world
+          manipulation tasks while keeping model weights and inference cost unchanged.
         </p>
       </div>
     </section>
