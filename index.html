@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ground Your Steps: Optimizing Sampling Schedules in Flow Matching Robot Policies</title>
-  <link rel="stylesheet" href="./style.css?v=8">
+  <link rel="stylesheet" href="./style.css?v=9">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans&amp;family=Open+Sans:wght@400;600&amp;display=swap">
 </head>
 <body>
@@ -176,7 +176,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <th scope="rowgroup" rowspan="4" class="policy-label">π<sub>0.5</sub></th>
+                  <th scope="rowgroup" rowspan="3" class="policy-label">π<sub>0.5</sub></th>
                   <th scope="row" class="schedule-label">Uniform</th>
                   <td>67.7<span class="std">&plusmn;0.6</span></td>
                   <td>68.2<span class="std">&plusmn;0.4</span></td>
@@ -206,20 +206,10 @@
                   <td>+2.7</td>
                   <td>+2.8</td>
                 </tr>
-                <tr class="latency-row">
-                  <th scope="row" class="schedule-label">Latency (ms)</th>
-                  <td>185</td>
-                  <td>196</td>
-                  <td>215</td>
-                  <td>230</td>
-                  <td>269</td>
-                  <td>302</td>
-                  <td>&ndash;</td>
-                </tr>
               </tbody>
               <tbody>
                 <tr>
-                  <th scope="rowgroup" rowspan="4" class="policy-label">GR00T N1.7</th>
+                  <th scope="rowgroup" rowspan="3" class="policy-label">GR00T N1.7</th>
                   <th scope="row" class="schedule-label">Uniform</th>
                   <td>47.8<span class="std">&plusmn;0.7</span></td>
                   <td>48.6<span class="std">&plusmn;0.6</span></td>
@@ -249,23 +239,12 @@
                   <td>+4.1</td>
                   <td>+2.8</td>
                 </tr>
-                <tr class="latency-row">
-                  <th scope="row" class="schedule-label">Latency (ms)</th>
-                  <td>123</td>
-                  <td>148</td>
-                  <td>158</td>
-                  <td>175</td>
-                  <td>206</td>
-                  <td>242</td>
-                  <td>&ndash;</td>
-                </tr>
               </tbody>
             </table>
           </div>
           <p class="table-note" id="results-note">Results at <em>B</em> &isin; {3, 4, 5, 6, 8, 10} are reported as
             mean &plusmn; std over four evaluation rounds (100 episodes per task per round). Avg. reports the mean
-            and std across the six budgets. Latency (ms) is the mean per-chunk inference time on one NVIDIA L4 GPU,
-            identical for Uniform and GYS at each budget.</p>
+            and std across the six budgets.</p>
         </figure>
       </section>
       <section id="real-world">

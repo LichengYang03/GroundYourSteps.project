@@ -101,7 +101,6 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
 .results-table tr > :last-child { border-left: 1px solid #d0dade; }
 .results-table .highlight-row { --row-bg: #eaf4fa; color: #204964; }
 .results-table .gain-row { color: #206f56; }
-.results-table .latency-row { color: #56646c; font-size: .875rem; }
 .results-table .std { margin-left: .14em; font-size: .77em; font-weight: 400; color: #58676f; }
 .results-table sub { font-size: .72em; line-height: 0; }
 .results .table-note { margin-top: 10px; font-size: .9375rem; line-height: 1.45; color: #58636a; }
