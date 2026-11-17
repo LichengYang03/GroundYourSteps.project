@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ground Your Steps: Optimizing Sampling Schedules in Flow Matching Robot Policies</title>
-  <link rel="stylesheet" href="./style.css?v=9">
+  <link rel="stylesheet" href="./style.css?v=10">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans&amp;family=Open+Sans:wght@400;600&amp;display=swap">
 </head>
 <body>
@@ -249,6 +249,108 @@
       </section>
       <section id="real-world">
         <h3>Real-world Experiments</h3>
+        <figure class="results" id="real-world-results">
+          <figcaption id="robot-results-title"><strong>Table 2.</strong> Closed-loop success rate (%) on three ROKAE AR5 tasks</figcaption>
+          <div class="table-wrap" role="region" aria-labelledby="robot-results-title" tabindex="0">
+            <table class="results-table" aria-labelledby="robot-results-title" aria-describedby="robot-results-note">
+              <colgroup><col class="policy-col"><col class="schedule-col"></colgroup>
+              <colgroup span="4"></colgroup>
+              <colgroup span="4"></colgroup>
+              <thead>
+                <tr>
+                  <th scope="col" rowspan="2" class="policy-label">Policy</th>
+                  <th scope="col" rowspan="2" class="schedule-label">Schedule</th>
+                  <th scope="colgroup" colspan="4"><em>B</em> = 3</th>
+                  <th scope="colgroup" colspan="4"><em>B</em> = 4</th>
+                </tr>
+                <tr>
+                  <th scope="col">PaP</th>
+                  <th scope="col">SbC</th>
+                  <th scope="col">SaC</th>
+                  <th scope="col">Avg.</th>
+                  <th scope="col">PaP</th>
+                  <th scope="col">SbC</th>
+                  <th scope="col">SaC</th>
+                  <th scope="col">Avg.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="rowgroup" rowspan="3" class="policy-label">π<sub>0.5</sub></th>
+                  <th scope="row" class="schedule-label">Uniform</th>
+                  <td><strong>78</strong></td>
+                  <td>71</td>
+                  <td>52</td>
+                  <td>67.0</td>
+                  <td>77</td>
+                  <td>73</td>
+                  <td>55</td>
+                  <td>68.3</td>
+                </tr>
+                <tr class="highlight-row">
+                  <th scope="row" class="schedule-label"><strong>GYS (ours)</strong></th>
+                  <td>77</td>
+                  <td><strong>74</strong></td>
+                  <td><strong>55</strong></td>
+                  <td><strong>68.7</strong></td>
+                  <td><strong>80</strong></td>
+                  <td><strong>75</strong></td>
+                  <td><strong>56</strong></td>
+                  <td><strong>70.3</strong></td>
+                </tr>
+                <tr class="gain-row">
+                  <th scope="row" class="schedule-label">Gain</th>
+                  <td class="nonpositive">−1</td>
+                  <td>+3</td>
+                  <td>+3</td>
+                  <td>+1.7</td>
+                  <td>+3</td>
+                  <td>+2</td>
+                  <td>+1</td>
+                  <td>+2.0</td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr>
+                  <th scope="rowgroup" rowspan="3" class="policy-label">GR00T N1.7</th>
+                  <th scope="row" class="schedule-label">Uniform</th>
+                  <td>72</td>
+                  <td>67</td>
+                  <td>47</td>
+                  <td>62.0</td>
+                  <td>75</td>
+                  <td>69</td>
+                  <td>51</td>
+                  <td>65.0</td>
+                </tr>
+                <tr class="highlight-row">
+                  <th scope="row" class="schedule-label"><strong>GYS (ours)</strong></th>
+                  <td><strong>74</strong></td>
+                  <td><strong>70</strong></td>
+                  <td><strong>52</strong></td>
+                  <td><strong>65.3</strong></td>
+                  <td>75</td>
+                  <td><strong>73</strong></td>
+                  <td><strong>55</strong></td>
+                  <td><strong>67.7</strong></td>
+                </tr>
+                <tr class="gain-row">
+                  <th scope="row" class="schedule-label">Gain</th>
+                  <td>+2</td>
+                  <td>+3</td>
+                  <td>+5</td>
+                  <td>+3.3</td>
+                  <td class="nonpositive">0</td>
+                  <td>+4</td>
+                  <td>+4</td>
+                  <td>+2.7</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note" id="robot-results-note">Both schedules use the same 100-episode benchmark.
+            Avg. is the mean across PaP, SbC, and SaC at each NFE budget. Gain is GYS minus Uniform, in percentage points.</p>
+        </figure>
         <div class="demo-grid">
           <figure>
             <video controls playsinline preload="none" width="1280" height="1280" aria-labelledby="caption-PaP" poster="./video/PaP.jpg" src="./video/PaP.mp4">

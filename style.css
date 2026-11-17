@@ -101,6 +101,9 @@ h3 { margin: 24px 0 12px; font-size: 22px; }
 .results-table tr > :last-child { border-left: 1px solid #d0dade; }
 .results-table .highlight-row { --row-bg: #eaf4fa; color: #204964; }
 .results-table .gain-row { color: #206f56; }
+#real-world-results .results-table td:is(:nth-last-child(4), :nth-last-child(5)),
+#real-world-results .results-table thead tr:last-child th:is(:nth-last-child(4), :nth-last-child(5)) { border-left: 1px solid #d0dade; }
+.results-table .gain-row .nonpositive { color: #56646c; }
 .results-table .std { margin-left: .14em; font-size: .77em; font-weight: 400; color: #58676f; }
 .results-table sub { font-size: .72em; line-height: 0; }
 .results .table-note { margin-top: 10px; font-size: .9375rem; line-height: 1.45; color: #58636a; }
