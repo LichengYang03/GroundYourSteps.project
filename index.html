@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ground Your Steps: Optimizing Sampling Schedules in Flow Matching Robot Policies</title>
-  <link rel="stylesheet" href="./style.css?v=23">
+  <link rel="stylesheet" href="./style.css?v=24">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=Google+Sans&amp;display=swap">
   <script>
     window.MathJax = {
@@ -82,9 +82,7 @@
     <section id="introduction">
       <h2>Introduction</h2>
       <p class="question-callout">
-        More steps don&rsquo;t always help, and where you step matters just as much.
-        Under a fixed NFE budget, can we unlock higher closed-loop success from a frozen flow matching policy
-        purely by choosing when to evaluate?
+        Flow-matching VLAs default to uniform sampling schedules, so what happens when the schedule is no longer uniform?
       </p>
       <div class="prose">
         <p>
@@ -118,6 +116,11 @@
     </section>
     <section id="method">
       <h2>Method</h2>
+      <p class="question-callout">
+        More steps don&rsquo;t always help, and where you step matters just as much.
+        Under a fixed NFE budget, can we unlock higher closed-loop success from a frozen flow matching policy
+        purely by choosing when to evaluate?
+      </p>
       <div class="prose">
         <p>
           Ground Your Steps (GYS) is a training-free method that optimizes the sampling schedule
