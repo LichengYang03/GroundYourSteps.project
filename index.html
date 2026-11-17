@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ground Your Steps: Optimizing Sampling Schedules in Flow Matching Robot Policies</title>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=2">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans&amp;family=Open+Sans:wght@400;600&amp;display=swap">
 </head>
 <body>
@@ -53,7 +53,7 @@
     <section id="introduction">
       <h2>Introduction</h2>
       <p class="question-callout">
-        More steps don&rsquo;t always help&mdash;and where you step matters just as much.
+        More steps don&rsquo;t always help, and where you step matters just as much.
         Under a fixed NFE budget, can we unlock higher closed-loop success from a frozen flow matching policy
         purely by choosing <strong>when</strong> to evaluate?
       </p>
@@ -68,12 +68,12 @@
           (ii) the <strong>Lipschitz window</strong>, where the marginal field becomes highly sensitive near the
           action endpoint and amplifies small integration errors.
           In closed-loop evaluations across 50 RoboTwin 2.0 tasks <strong>(a)</strong>, we observe that uniform
-          sampling exhibits non-monotonic performance as the NFE budget <em>B</em> increases—peaking at
-          <em>B</em> = 4 for π<sub>0.5</sub> and <em>B</em> = 6 for GR00T N1.7 before degrading—and that at a
-          fixed budget (<em>B</em> = 5), a moderate bias toward the noise endpoint outperforms the uniform grid
-          while concentrating nodes near either endpoint hurts success. These observations identify the sampling
-          schedule as a direct lever on both the generated action distribution and task success, motivating a
-          demonstration-grounded criterion for choosing evaluation times at each fixed budget.
+          sampling exhibits non-monotonic performance as the NFE budget <em>B</em> increases. Specifically, success
+          peaks at <em>B</em> = 4 for π<sub>0.5</sub> and <em>B</em> = 6 for GR00T N1.7, and then degrades at
+          larger budgets. At a fixed budget (<em>B</em> = 5), a moderate bias toward the noise endpoint outperforms
+          the uniform grid, whereas concentrating nodes near either endpoint hurts success. These observations
+          identify the sampling schedule as a direct lever on both the generated action distribution and task
+          success, motivating a demonstration-grounded criterion for choosing evaluation times at each fixed budget.
         </p>
       </div>
       <figure class="teaser">
@@ -98,7 +98,7 @@
           endpoint <strong>(b)</strong> and brings the generated distribution closer to the demonstrations.
           Across 50 RoboTwin 2.0 tasks at 3 to 10 NFEs <strong>(d)</strong>, GYS raises mean closed-loop
           success from 67.5% to 70.3% for π<sub>0.5</sub> and from 49.2% to 52.0% for GR00T N1.7, and transfers
-          to three real-world manipulation tasks—all with model weights and inference cost untouched.
+          to three real-world manipulation tasks while leaving model weights and inference cost untouched.
         </p>
       </div>
     </section>
