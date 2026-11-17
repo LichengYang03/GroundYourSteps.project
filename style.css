@@ -1,7 +1,15 @@
+@font-face {
+  font-family: "Myriad Pro";
+  src: local("Myriad Pro"), local("MyriadPro-Regular"),
+       url("https://georedteam.github.io/static/css/fonts/MyriadPro-Regular.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 :root {
   color: #363636;
   background: white;
-  --body: "Inter", sans-serif;
+  --body: "Myriad Pro", sans-serif;
   font: 400 16px/1.5 var(--body);
   --display: "Google Sans", var(--body);
   --frame: #dbdbdb;
@@ -39,7 +47,7 @@ h2, h3 { text-align: center; font-family: var(--display); font-weight: 600; line
 h2 { margin-bottom: 20px; font-size: 30px; letter-spacing: -.02em; }
 h3 { margin: 24px 0 12px; font-size: 22px; }
 .prose, .question-callout {
-  color: #0a0a0a;
+  color: #222222;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
