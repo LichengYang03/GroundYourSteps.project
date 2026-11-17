@@ -60,7 +60,7 @@
       <p class="question-callout">
         More steps don&rsquo;t always help, and where you step matters just as much.
         Under a fixed NFE budget, can we unlock higher closed-loop success from a frozen flow matching policy
-        purely by choosing <strong>when</strong> to evaluate?
+        purely by choosing when to evaluate?
       </p>
       <div class="prose">
         <p>
@@ -73,7 +73,7 @@
           marginal trajectories that coarse integration steps fail to resolve; and
           (ii) the <em>Lipschitz window</em>, where the marginal field becomes highly sensitive to the action
           state near the action endpoint and amplifies small deviations.
-          In closed-loop evaluations across 50 RoboTwin 2.0 tasks (<strong>Figure 1(a)</strong>), uniform
+          In closed-loop evaluations across 50 RoboTwin 2.0 tasks (Figure 1(a)), uniform
           sampling exhibits non-monotonic performance as the NFE budget <em>B</em> increases: success peaks at
           <em>B</em> = 4 for π<sub>0.5</sub> and <em>B</em> = 6 for GR00T N1.7, and then declines at larger
           budgets. At a fixed budget of <em>B</em> = 5, a moderate bias toward the noise start
@@ -82,7 +82,7 @@
         </p>
         <p>
           Together, these observations identify the sampling schedule as a direct lever on both the generated
-          action distribution and closed-loop task success. We propose <strong>Ground Your Steps (GYS)</strong>,
+          action distribution and closed-loop task success. We propose Ground Your Steps (GYS),
           a training-free method that grounds the sampling schedule in task demonstrations. By optimizing a
           distribution-matching objective offline over candidate schedules for each task and NFE budget, GYS
           brings the generated action distribution closer to the demonstrations and improves closed-loop success
@@ -100,7 +100,7 @@
       <h2>Method</h2>
       <div class="prose">
         <p>
-          <strong>Ground Your Steps (GYS)</strong> optimizes the sampling schedule of a frozen flow matching
+          Ground Your Steps (GYS) optimizes the sampling schedule of a frozen flow matching
           policy offline using only a calibration set of demonstration chunks and no environment interaction.
           With policy weights and the NFE budget fixed, GYS targets agreement between the generated and
           demonstrated conditional action-chunk distributions at each observation. Because raw action chunks
@@ -115,7 +115,7 @@
           demonstrated distribution cannot be estimated directly. GYS resolves this by comparing two types of
           transformed pairwise differences computed at the same observation with independent noise draws:
           generated&ndash;demonstrated differences and generated&ndash;generated differences
-          (<strong>Figure 1(c)</strong>). Under the stated identifiability assumptions, their distributions
+          (Figure 1(c)). Under the stated identifiability assumptions, their distributions
           coincide exactly when the transformed generated and demonstrated action distributions match. By pairing
           each difference sample with a mean-pooled summary of the backbone&rsquo;s observation representation,
           GYS preserves conditional alignment when pooling across the calibration set and scores candidate
@@ -125,9 +125,9 @@
           Using a fixed calibration set and shared noise draws, GYS parameterizes positive step widths and
           searches for the lowest-scoring schedule via particle swarm optimization without backpropagating
           through the policy. The resulting schedules adapt to each task and budget while placing fewer interior
-          nodes near the sensitive action endpoint (<strong>Figure 1(b)</strong>). The optimized schedule
+          nodes near the sensitive action endpoint (Figure 1(b)). The optimized schedule
           replaces the uniform grid at deployment and raises the success rate across budgets, without changing
-          the policy weights or the inference cost (<strong>Figure 1(d)</strong>).
+          the policy weights or the inference cost (Figure 1(d)).
         </p>
       </div>
     </section>
@@ -143,9 +143,9 @@
             independent evaluation rounds of 100 episodes each.
           </p>
           <p>
-            As summarized in <strong>Figure 1(d)</strong> and <strong>Table 1</strong>, GYS consistently
+            As summarized in Figure 1(d) and Table 1, GYS consistently
             outperforms the uniform schedule at every tested budget for both policies, raising the mean
-            closed-loop success rate across budgets by <strong>2.8 percentage points</strong> for both
+            closed-loop success rate across budgets by 2.8 percentage points for both
             π<sub>0.5</sub> (67.5% &rarr; 70.3%) and GR00T N1.7 (49.2% &rarr; 52.0%). For GR00T N1.7, GYS also
             prevents the sharp degradation of uniform sampling at larger budgets, delivering gains of +5.0
             percentage points at <em>B</em> = 8 and +4.1 percentage points at <em>B</em> = 10.
@@ -247,18 +247,11 @@
         <div class="prose">
           <p>
             We further validate GYS on a ROKAE AR5 dual-arm platform across three manipulation tasks of
-            increasing difficulty, pulling a drawer and picking cubes (<strong>PaP</strong>), sorting cubes by
-            color (<strong>SbC</strong>), and stacking cubes and covering them (<strong>SaC</strong>). Both
-            π<sub>0.5</sub> and GR00T N1.7 are evaluated against the uniform schedule at NFE budgets
-            <em>B</em> &isin; {3, 4} over 100 episodes per task.
-          </p>
-          <p>
-            As shown in <strong>Table 2</strong>, the simulation gains transfer cleanly to the real robot.
-            GYS improves the three-task average for both policies at both budgets by <strong>1.7 to 3.3
-            percentage points</strong>, with consistent gains on the more challenging multi-stage tasks
-            <strong>SbC</strong> and <strong>SaC</strong>. Notably, GYS at <em>B</em> = 3 already
-            outperforms the 4-step uniform baseline on average for both π<sub>0.5</sub> (68.7% vs. 68.3%) and
-            GR00T N1.7 (65.3% vs. 65.0%).
+            increasing difficulty, pulling a drawer and picking cubes (PaP), sorting cubes by color (SbC), and
+            stacking cubes and covering them (SaC). Both π<sub>0.5</sub> and GR00T N1.7 are evaluated against
+            the uniform schedule at NFE budgets <em>B</em> &isin; {3, 4} over 100 episodes per task. As shown
+            in Table 2, the simulation gains transfer cleanly to the real robot, with GYS improving the
+            three-task average for both policies at both budgets by 1.7 to 3.3 percentage points.
           </p>
         </div>
         <figure class="results" id="real-world-results">
