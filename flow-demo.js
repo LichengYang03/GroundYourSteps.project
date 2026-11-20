@@ -110,19 +110,12 @@
     const fraction = (progress - grid[segment]) / (grid[segment + 1] - grid[segment]);
     for (const [index, states] of paths.entries()) {
       const highlighted = index === 5 || index === 12 || index === 20;
-      ctx.beginPath();
-      ctx.moveTo(left, y(states[0]));
-      states.slice(1).forEach((state, step) => ctx.lineTo(x(grid[step + 1]), y(state)));
-      ctx.strokeStyle = "#d6e1e8";
-      ctx.lineWidth = 0.85;
-      ctx.stroke();
-
       const current = states[segment] + fraction * (states[segment + 1] - states[segment]);
       ctx.beginPath();
       ctx.moveTo(left, y(states[0]));
       for (let step = 1; step <= segment; step++) ctx.lineTo(x(grid[step]), y(states[step]));
       ctx.lineTo(x(progress), y(current));
-      ctx.globalAlpha = highlighted ? 1 : 0.28;
+      ctx.globalAlpha = highlighted ? 1 : 0.34;
       ctx.strokeStyle = color;
       ctx.lineWidth = highlighted ? 1.9 : 1;
       ctx.stroke();
