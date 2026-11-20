@@ -272,12 +272,13 @@ figcaption { font-size: 1rem; }
   font-variant-numeric: tabular-nums;
 }
 .flow-panel:has([data-flow="gys"]) .flow-panel-heading span { color: #00568e; background: #e0f0fc; }
-.flow-chart { display: block; width: 100%; height: 340px; margin-block: 12px 6px; }
+.flow-chart { display: block; width: 100%; height: 492px; margin-block: 12px 6px; }
 .flow-panel p { color: #40586a; font-size: 15px; line-height: 1.35; }
 .flow-legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 5px 16px; margin-block: 15px 12px; font-size: 16px; }
 .flow-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .flow-legend i { width: 16px; }
 .flow-legend .flow-generated { border-top: 2px solid var(--generated-blue); }
+.flow-legend .flow-tangent { border-top: 2px dashed #996b33; }
 .flow-legend .flow-reference { border-top: 2px dashed #253d4d; }
 .flow-legend .flow-window { height: 9px; border: 1px solid #ead2aa; border-radius: 2px; background: #fbf0de; }
 .flow-controls { display: flex; align-items: center; justify-content: center; gap: 10px; padding-top: 12px; border-top: 1px solid #dbe4ec; font-size: 16px; }

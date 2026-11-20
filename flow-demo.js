@@ -50,6 +50,16 @@
     return { canvas, grid, paths, mean, std, gys };
   }
 
+  const detailEnd = 0.95;
+  const detailPathIndex = 5;
+  const tangentColor = "#996b33";
+
+  function stateAt(grid, path, time) {
+    const end = Math.max(1, grid.findIndex(node => node >= time));
+    const fraction = (time - grid[end - 1]) / (grid[end] - grid[end - 1]);
+    return path[end - 1] + fraction * (path[end] - path[end - 1]);
+  }
+
   const panels = Array.from(figure.querySelectorAll(".flow-chart"), makePanel);
   const duration = 1200;
   const autoplayThreshold = 0.35;
@@ -76,7 +86,7 @@
     const left = 32;
     const right = width - 12;
     const top = 24;
-    const bottom = height - 134;
+    const bottom = height - 286;
     const base = height - 24;
     const x = time => left + time * (right - left);
     const y = state => top + (2.5 - state) * (bottom - top) / 5;
@@ -113,7 +123,12 @@
     for (const tick of [0, 0.5, 1]) label(String(tick), x(tick), bottom + 16, "center");
     label("Flow time τ", x(0.5), bottom + 32, "center");
 
-    const segment = grid.findIndex((time, index) => index && time >= progress) - 1;
+    const detailPath = paths[detailPathIndex];
+    const incomingSlope = (detailPath[1] - detailPath[0]) / grid[1];
+    const tangent = time => detailPath[0] + time * incomingSlope;
+    line(x(bendStart), y(tangent(bendStart)), x(detailEnd), y(tangent(detailEnd)), tangentColor, [3, 3]);
+
+    const segment = Math.max(0, grid.findIndex(time => time >= progress) - 1);
     const fraction = (progress - grid[segment]) / (grid[segment + 1] - grid[segment]);
     for (const [index, states] of paths.entries()) {
       const highlighted = index === 5 || index === 12 || index === 20;
@@ -141,6 +156,46 @@
       }
     }
     if (progress < 1) line(x(progress), top, x(progress), bottom, generatedColor, [2, 4]);
+
+    const detailTop = bottom + 65;
+    const detailBottom = detailTop + 87;
+    const detailX = time => left + (time - bendStart) / (detailEnd - bendStart) * (right - left);
+    const detailY = state => detailBottom - (state + 0.04) / 0.25 * (detailBottom - detailTop);
+    label("Lower trajectory · close-up", left, detailTop - 8);
+    ctx.fillStyle = "#fcf6eb";
+    ctx.fillRect(left, detailTop, right - left, detailBottom - detailTop);
+    for (const state of [0, 0.1, 0.2]) {
+      line(left, detailY(state), right, detailY(state), "#e5e2dc");
+      label(state.toFixed(1), left - 6, detailY(state) + 4, "right");
+    }
+    for (const time of [bendStart, 0.85, 0.90, detailEnd]) {
+      const align = time === bendStart ? "left" : time === detailEnd ? "right" : "center";
+      label(time.toFixed(2), detailX(time), detailBottom + 16, align);
+    }
+
+    const through = Math.min(progress, detailEnd);
+    if (through > bendStart) {
+      ctx.beginPath();
+      ctx.moveTo(left, detailY(stateAt(grid, detailPath, bendStart)));
+      for (let i = 1; i < grid.length && grid[i] < through; i++) {
+        if (grid[i] > bendStart) ctx.lineTo(detailX(grid[i]), detailY(detailPath[i]));
+      }
+      ctx.lineTo(detailX(through), detailY(stateAt(grid, detailPath, through)));
+      ctx.strokeStyle = generatedColor;
+      ctx.lineWidth = 2.4;
+      ctx.stroke();
+      ctx.lineTo(detailX(through), detailY(tangent(through)));
+      ctx.lineTo(left, detailY(tangent(bendStart)));
+      ctx.closePath();
+      ctx.fillStyle = generatedColor;
+      ctx.globalAlpha = 0.12;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    line(left, detailY(tangent(bendStart)), right, detailY(tangent(detailEnd)), tangentColor, [4, 4]);
+    if (progress >= bendStart && progress < detailEnd) {
+      line(detailX(progress), detailTop, detailX(progress), detailBottom, generatedColor, [2, 4]);
+    }
 
     label("Endpoint distribution", left, base - 62);
     line(left, base, right, base, "#a4b5c1");

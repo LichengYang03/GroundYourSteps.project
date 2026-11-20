@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ground Your Steps: Optimizing Sampling Schedules in Flow Matching Robot Policies</title>
-  <link rel="stylesheet" href="./style.css?v=34">
+  <link rel="stylesheet" href="./style.css?v=35">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=Google+Sans&amp;display=swap">
   <script>
     window.MathJax = {
@@ -16,7 +16,7 @@
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
   <script src="./experiment-tabs.js?v=2" defer></script>
-  <script src="./flow-demo.js?v=30" defer></script>
+  <script src="./flow-demo.js?v=31" defer></script>
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Page navigation">
@@ -68,7 +68,7 @@
               <span>100 steps of integration</span>
             </div>
             <canvas class="flow-chart" data-flow="uniform" role="img"
-              aria-label="Uniform schedule traces a late bend and ends with a wider distribution shifted away from the demonstrations."></canvas>
+              aria-label="The lower uniform trajectory bends away from its incoming tangent in the close-up from flow time 0.82 to 0.95. The endpoint distribution is wider and shifted away from the demonstrations."></canvas>
             <p>The dense grid samples the late bend, shifting and spreading the endpoints.</p>
           </div>
           <div class="flow-panel">
@@ -77,13 +77,14 @@
               <span>5 steps of integration</span>
             </div>
             <canvas class="flow-chart" data-flow="gys" role="img"
-              aria-label="Five GYS steps, shown with evaluation nodes at 0, 0.298, 0.390, 0.583 and 0.752. The final step crosses the late bend and the endpoint distribution closely matches the demonstrations."></canvas>
+              aria-label="Five GYS steps, shown with evaluation nodes at 0, 0.298, 0.390, 0.583 and 0.752. The lower trajectory follows its incoming tangent throughout the close-up. The endpoint distribution closely matches the demonstrations."></canvas>
             <p>The last step spans the Lipschitz window and lands closer to the demonstrations.</p>
           </div>
         </div>
         <div class="flow-legend">
           <span><i class="flow-generated" aria-hidden="true"></i>Generated</span>
           <span><i class="flow-reference" aria-hidden="true"></i>Demonstrated</span>
+          <span><i class="flow-tangent" aria-hidden="true"></i>Incoming tangent</span>
           <span><i class="flow-window" aria-hidden="true"></i>Lipschitz window (τ ≥ 0.8)</span>
         </div>
         <div class="flow-controls">
