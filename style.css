@@ -304,7 +304,58 @@ figcaption { font-size: 1rem; }
 .flow-play:disabled { opacity: .65; cursor: default; }
 .flow-controls label, .flow-time-value { white-space: nowrap; }
 .flow-time-value { min-width: 2.5ch; font-variant-numeric: tabular-nums; }
-.flow-controls input { flex: 0 1 280px; min-width: 0; margin: 0; accent-color: #006eb8; }
+#flow-time {
+  --thumb-width: 30px;
+  --thumb-height: 21px;
+  --track-height: 6px;
+  --flow-progress: 1;
+  --track-fill: calc(var(--thumb-width) / 2 + (100% - var(--thumb-width)) * var(--flow-progress));
+  --track-background: linear-gradient(to right, #006eb8 var(--track-fill), #dce7ef var(--track-fill));
+  --thumb-background: linear-gradient(166deg, rgb(255 255 255 / .9), rgb(239 248 255 / .45) 57%, rgb(203 226 243 / .72));
+  --thumb-shadow: inset 0 1px 1px rgb(255 255 255 / .95), inset 0 -1px 2px rgb(92 147 187 / .28),
+    0 2px 5px rgb(51 97 134 / .23);
+  appearance: none;
+  flex: 0 1 280px;
+  min-width: 0;
+  height: 36px;
+  margin: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: grab;
+}
+#flow-time:active { cursor: grabbing; }
+#flow-time:disabled { cursor: default; }
+#flow-time:focus-visible { outline: 2px solid #006eb8; outline-offset: 2px; }
+#flow-time::-webkit-slider-runnable-track {
+  height: var(--track-height);
+  border-radius: 999px;
+  background: var(--track-background);
+}
+#flow-time::-moz-range-track {
+  height: var(--track-height);
+  border-radius: 999px;
+  background: var(--track-background);
+}
+#flow-time::-webkit-slider-thumb {
+  appearance: none;
+  box-sizing: border-box;
+  width: var(--thumb-width);
+  height: var(--thumb-height);
+  margin-top: calc((var(--track-height) - var(--thumb-height)) / 2);
+  border: 1px solid rgb(80 135 176 / .36);
+  border-radius: 999px;
+  background: var(--thumb-background);
+  box-shadow: var(--thumb-shadow);
+}
+#flow-time::-moz-range-thumb {
+  box-sizing: border-box;
+  width: var(--thumb-width);
+  height: var(--thumb-height);
+  border: 1px solid rgb(80 135 176 / .36);
+  border-radius: 999px;
+  background: var(--thumb-background);
+  box-shadow: var(--thumb-shadow);
+}
 @media (max-width: 650px) {
   .flow-heading { margin-bottom: 14px; }
   .flow-panels { grid-template-columns: minmax(0, 1fr); }

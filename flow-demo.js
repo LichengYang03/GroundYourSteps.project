@@ -175,6 +175,7 @@
   function render(value) {
     progress = value;
     slider.value = Math.round(progress * 1000);
+    slider.style.setProperty("--flow-progress", Number(slider.value) / 1000);
     slider.setAttribute("aria-valuetext", progress.toFixed(2));
     readout.textContent = progress.toFixed(2);
     panels.forEach(drawPanel);
