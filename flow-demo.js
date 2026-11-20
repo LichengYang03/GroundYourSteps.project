@@ -7,7 +7,7 @@
   const generatedColor = getComputedStyle(figure).getPropertyValue("--generated-blue").trim();
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  // Second coordinate of the toy velocity field in paper Fig. 2(d).
+  // Toy transport adapted from paper Fig. 2(d).
   const targetMean = 0.6;
   const targetStd = 0.25;
   const lateStart = 0.8;
@@ -17,11 +17,26 @@
 
   function velocity(value, time) {
     const scale = 1 - time + time * targetStd;
-    const base = (targetStd - 1) * (value - time * targetMean) / scale + targetMean;
-    // The late drift bends the entire displayed fan, and the higher power sharpens the endpoint turn.
-    const lateFraction = Math.max(0, (time - lateStart) / (1 - lateStart));
-    const gate = 2.05 * lateFraction ** 1.3 + 1.85 * lateFraction ** 12;
-    return base + gate * (0.85 * (value - targetMean) - 2.1);
+    const centered = value - time * targetMean;
+    if (time <= lateStart) return targetMean + (targetStd - 1) * centered / scale;
+
+    const fraction = (time - lateStart) / (1 - lateStart);
+    const warp = 0.72 * fraction ** 1.65 + 0.28 * fraction ** 6;
+    const warpRate = (0.72 * 1.65 * fraction ** 0.65 + 0.28 * 6 * fraction ** 5) / (1 - lateStart);
+    // Invert the monotone toy transport to evaluate one velocity field for both schedules.
+    const linear = scale + 0.09 * warp;
+    const wave = 0.125 * warp;
+    const estimate = (centered + 0.019 * warp) / linear;
+    let lower = estimate - wave / linear;
+    let upper = estimate + wave / linear;
+    for (let index = 0; index < 20; index++) {
+      const mid = (lower + upper) / 2;
+      if (linear * (mid - estimate) < wave * Math.sin(2.5 * mid)) lower = mid;
+      else upper = mid;
+    }
+    const noise = (lower + upper) / 2;
+    const offset = 0.09 * noise - 0.125 * Math.sin(2.5 * noise) - 0.019;
+    return targetMean + (targetStd - 1) * noise + warpRate * offset;
   }
 
   function integrate(grid, initial) {
@@ -34,17 +49,35 @@
     return states;
   }
 
+  const densityStates = Array.from({ length: 121 }, (_, index) => -0.6 + 2.4 * index / 120);
+  const referenceDensity = densityStates.map(state => Math.exp(-0.5 * ((state - targetMean) / targetStd) ** 2));
+
+  function endpointDensity(grid) {
+    const bandwidth = 0.055;
+    // Integrate a Gaussian-weighted noise grid, then smooth the actual endpoints.
+    const samples = Array.from({ length: 321 }, (_, index) => {
+      const noise = -4 + 8 * index / 320;
+      return { endpoint: integrate(grid, noise).at(-1), weight: Math.exp(-0.5 * noise ** 2) };
+    });
+    const totalWeight = samples.reduce((total, sample) => total + sample.weight, 0);
+    return densityStates.map(state => {
+      const weighted = samples.reduce((total, { endpoint, weight }) =>
+        total + weight * Math.exp(-0.5 * ((state - endpoint) / bandwidth) ** 2), 0);
+      return weighted * targetStd / (bandwidth * totalWeight);
+    });
+  }
+
   function makePanel(canvas) {
     const gys = canvas.dataset.flow === "gys";
     const grid = gys ? gysGrid : uniformGrid;
     const paths = startingStates.map(initial => integrate(grid, initial));
-    // The updates are affine, so propagating 0 and 1 gives the Gaussian endpoint law.
-    const mean = integrate(grid, 0).at(-1);
-    const std = integrate(grid, 1).at(-1) - mean;
-    return { canvas, grid, paths, mean, std, gys };
+    // Every GYS evaluation precedes the window, where Euler preserves the Gaussian map.
+    const endpoint = gys ? referenceDensity : endpointDensity(grid);
+    return { canvas, grid, paths, endpoint, gys };
   }
 
   const panels = Array.from(figure.querySelectorAll(".flow-chart"), makePanel);
+  const densityPeak = Math.max(1, ...panels.flatMap(panel => panel.endpoint));
   const duration = 1200;
   const autoplayThreshold = 0.35;
   let progress = 1;
@@ -143,13 +176,11 @@
       label(String(tick), densityX(tick), base + 17, "center");
     }
 
-    function density(mean, std, ink, dashed = false) {
+    function density(amplitudes, ink, dashed = false) {
       ctx.beginPath();
-      for (let index = 0; index <= 120; index++) {
-        const state = -0.6 + 2.4 * index / 120;
-        const amplitude = Math.exp(-0.5 * ((state - mean) / std) ** 2) * targetStd / std;
-        ctx.lineTo(densityX(state), base - 51 * amplitude);
-      }
+      amplitudes.forEach((amplitude, index) => {
+        ctx.lineTo(densityX(densityStates[index]), base - 51 * amplitude / densityPeak);
+      });
       ctx.strokeStyle = ink;
       ctx.lineWidth = dashed ? 1.5 : 2.2;
       ctx.setLineDash(dashed ? [4, 4] : []);
@@ -168,9 +199,9 @@
 
     if (progress >= 0.98) {
       ctx.globalAlpha = Math.min(1, 0.2 + 40 * (progress - 0.98));
-      density(panel.mean, panel.std, generatedColor);
+      density(panel.endpoint, generatedColor);
     }
-    density(targetMean, targetStd, "#253d4d", true);
+    density(referenceDensity, "#253d4d", true);
   }
 
   function render(value) {
