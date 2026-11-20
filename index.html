@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ground Your Steps: Optimizing Sampling Schedules in Flow Matching Robot Policies</title>
-  <link rel="stylesheet" href="./style.css?v=25">
+  <link rel="stylesheet" href="./style.css?v=26">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=Google+Sans&amp;display=swap">
   <script>
     window.MathJax = {
@@ -16,7 +16,7 @@
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
   <script src="./experiment-tabs.js?v=2" defer></script>
-  <script src="./flow-demo.js?v=1" defer></script>
+  <script src="./flow-demo.js?v=2" defer></script>
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Page navigation">
@@ -58,22 +58,22 @@
       </div>
       <figure class="flow-demo" id="flow-demo" aria-labelledby="flow-title">
         <header class="flow-heading">
-          <h2 id="flow-title">Four steps, closer to demonstrations</h2>
-          <p>Same starting noise and velocity field. Different sampling schedules.</p>
+          <h2 id="flow-title">Four-step flow matching</h2>
+          <p>Same starting noise and velocity field. Different sampling schedules, different endpoint distributions.</p>
         </header>
         <div class="flow-panels">
           <div class="flow-panel">
             <div class="flow-panel-heading">
-              <h3>Uniform integration</h3>
+              <h3>Uniform schedule</h3>
               <span>100 steps</span>
             </div>
             <canvas class="flow-chart" data-flow="uniform" role="img"
-              aria-label="Uniform integration traces a late bend and ends with a wider distribution shifted away from the demonstrations."></canvas>
+              aria-label="Uniform schedule traces a late bend and ends with a wider distribution shifted away from the demonstrations."></canvas>
             <p>The dense grid samples the late bend, shifting and spreading the endpoints.</p>
           </div>
           <div class="flow-panel">
             <div class="flow-panel-heading">
-              <h3>GYS schedule</h3>
+              <h3>GYS-optimized schedule</h3>
               <span>4 steps</span>
             </div>
             <canvas class="flow-chart" data-flow="gys" role="img"
@@ -92,7 +92,6 @@
           <input id="flow-time" type="range" min="0" max="1000" value="1000" disabled>
           <span class="flow-time-value" aria-hidden="true">1.00</span>
         </div>
-        <figcaption>Animated toy example based on paper Fig. 2(d). Both panels use the same axes.</figcaption>
       </figure>
     </header>
 

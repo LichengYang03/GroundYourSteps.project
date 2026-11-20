@@ -9,6 +9,8 @@
   const targetMean = 0.6;
   const targetStd = 0.25;
   const lateStart = 0.8;
+  // Amplify the toy field’s late residual so the bend is visible at page scale.
+  const lateResidualScale = 1.8;
   const gysGrid = [0, 0.235, 0.49, 0.674, 1];
   const uniformGrid = Array.from({ length: 101 }, (_, index) => index / 100);
   const startingStates = Array.from({ length: 25 }, (_, index) => 2.25 * (index / 12 - 1));
@@ -18,7 +20,7 @@
     const base = (targetStd - 1) * (value - time * targetMean) / scale + targetMean;
     const ramp = Math.max(0, (time - lateStart) / (1 - lateStart));
     const gate = ramp / (1 + Math.exp(-(time - lateStart) / 0.025));
-    return base + gate * (3.2 * (value - targetMean) - 1.12);
+    return base + lateResidualScale * gate * (3.2 * (value - targetMean) - 1.12);
   }
 
   function integrate(grid, initial) {
@@ -42,7 +44,7 @@
   }
 
   const panels = Array.from(figure.querySelectorAll(".flow-chart"), makePanel);
-  const duration = 5200;
+  const duration = 3200;
   const autoplayThreshold = 0.35;
   let progress = 1;
   let frame = null;
@@ -66,9 +68,9 @@
 
     const left = 32;
     const right = width - 12;
-    const top = 22;
-    const bottom = 148;
-    const base = 248;
+    const top = 24;
+    const bottom = height - 134;
+    const base = height - 24;
     const x = time => left + time * (right - left);
     const y = state => top + (2.5 - state) * (bottom - top) / 5;
     const densityX = state => left + (state + 0.6) * (right - left) / 2.4;
@@ -86,7 +88,7 @@
 
     function label(value, x, y, align = "left") {
       ctx.fillStyle = "#526879";
-      ctx.font = "12px system-ui, sans-serif";
+      ctx.font = '14px "Myriad Pro", sans-serif';
       ctx.textAlign = align;
       ctx.fillText(value, x, y);
     }
@@ -140,7 +142,7 @@
     }
     if (progress < 1) line(x(progress), top, x(progress), bottom, color, [2, 4]);
 
-    label("Endpoint distribution", left, 196);
+    label("Endpoint distribution", left, base - 62);
     line(left, base, right, base, "#a4b5c1");
     for (const tick of [-0.5, 0, 0.5, 1, 1.5]) {
       line(densityX(tick), base, densityX(tick), base + 3, "#a4b5c1");
@@ -152,7 +154,7 @@
       for (let index = 0; index <= 120; index++) {
         const state = -0.6 + 2.4 * index / 120;
         const amplitude = Math.exp(-0.5 * ((state - mean) / std) ** 2) * targetStd / std;
-        ctx.lineTo(densityX(state), base - 43 * amplitude);
+        ctx.lineTo(densityX(state), base - 51 * amplitude);
       }
       ctx.strokeStyle = ink;
       ctx.lineWidth = dashed ? 1.5 : 2.2;
@@ -230,5 +232,6 @@
   const resize = new ResizeObserver(() => panels.forEach(drawPanel));
   panels.forEach(({ canvas }) => resize.observe(canvas));
   render(1);
+  document.fonts.load('14px "Myriad Pro"').then(() => panels.forEach(drawPanel), () => {});
   observer.observe(figure);
 })();
