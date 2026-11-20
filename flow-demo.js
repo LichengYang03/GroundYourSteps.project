@@ -4,6 +4,7 @@
   const slider = figure.querySelector("#flow-time");
   const sliderTrack = slider.closest(".flow-slider");
   const readout = figure.querySelector(".flow-time-value");
+  const generatedColor = getComputedStyle(figure).getPropertyValue("--flow-blue").trim();
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   // Second coordinate of the toy velocity field in paper Fig. 2(d).
@@ -41,7 +42,7 @@
     // The updates are affine, so propagating 0 and 1 gives the Gaussian endpoint law.
     const mean = integrate(grid, 0).at(-1);
     const std = integrate(grid, 1).at(-1) - mean;
-    return { canvas, grid, paths, mean, std, gys, color: gys ? "#006eb8" : "#546f86" };
+    return { canvas, grid, paths, mean, std, gys };
   }
 
   const panels = Array.from(figure.querySelectorAll(".flow-chart"), makePanel);
@@ -52,7 +53,7 @@
   let startTime = null;
 
   function drawPanel(panel) {
-    const { canvas, grid, paths, color, gys } = panel;
+    const { canvas, grid, paths, gys } = panel;
     const width = canvas.clientWidth;
     if (!width) return;
     const height = canvas.clientHeight;
@@ -117,7 +118,7 @@
       for (let step = 1; step <= segment; step++) ctx.lineTo(x(grid[step]), y(states[step]));
       ctx.lineTo(x(progress), y(current));
       ctx.globalAlpha = highlighted ? 1 : 0.34;
-      ctx.strokeStyle = color;
+      ctx.strokeStyle = generatedColor;
       ctx.lineWidth = highlighted ? 1.9 : 1;
       ctx.stroke();
       ctx.globalAlpha = 1;
@@ -128,13 +129,13 @@
           ctx.arc(x(grid[step]), y(states[step]), 2.7, 0, 2 * Math.PI);
           ctx.fillStyle = "white";
           ctx.fill();
-          ctx.strokeStyle = color;
+          ctx.strokeStyle = generatedColor;
           ctx.lineWidth = 1.4;
           ctx.stroke();
         }
       }
     }
-    if (progress < 1) line(x(progress), top, x(progress), bottom, color, [2, 4]);
+    if (progress < 1) line(x(progress), top, x(progress), bottom, generatedColor, [2, 4]);
 
     label("Endpoint distribution", left, base - 62);
     line(left, base, right, base, "#a4b5c1");
@@ -168,7 +169,7 @@
 
     if (progress >= 0.98) {
       ctx.globalAlpha = Math.min(1, 0.2 + 40 * (progress - 0.98));
-      density(panel.mean, panel.std, color);
+      density(panel.mean, panel.std, generatedColor);
     }
     density(targetMean, targetStd, "#253d4d", true);
   }
