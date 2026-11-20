@@ -11,8 +11,8 @@
   const targetMean = 0.6;
   const targetStd = 0.25;
   const lateStart = 0.8;
-  const bendStart = 0.79;
-  const pivotNoise = 0.8;
+  const bendStart = 0.82;
+  const pivotNoise = 1.32843899;
   const gysGrid = [0, 0.298, 0.390, 0.583, 0.752, 1];
   const uniformGrid = Array.from({ length: 101 }, (_, index) => index / 100);
   const startingStates = Array.from({ length: 25 }, (_, index) => 2.25 * (index / 12 - 1));
@@ -24,8 +24,8 @@
     const u = Math.max(0, (time - bendStart) / (1 - bendStart));
     const midPhase = Math.max(0, (time - 0.84) / 0.16);
     const terminalPhase = Math.max(0, (time - 0.95) / 0.05);
-    const gradualGain = 1.2 * (u + 0.35 * u ** 2) + 0.32 * midPhase ** 2.6;
-    const terminalGain = 0.75 * terminalPhase ** 2 + 15 * terminalPhase ** 10;
+    const gradualGain = u + 0.21291756 * u ** 2 + 0.21951923 * midPhase ** 5;
+    const terminalGain = 0.60936 * terminalPhase ** 2 + terminalPhase ** 7 + 2 * terminalPhase ** 9;
     const gain = gradualGain + terminalGain;
     return base + gain * (noise - pivotNoise);
   }
