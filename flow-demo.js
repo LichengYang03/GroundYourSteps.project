@@ -13,82 +13,64 @@
   const lateStart = 0.8;
   const gysGrid = [0, 0.298, 0.390, 0.583, 0.752, 1];
   const uniformGrid = Array.from({ length: 101 }, (_, index) => index / 100);
-  const startingStates = Array.from({ length: 25 }, (_, index) => 2.25 * (index / 12 - 1));
 
-  const lateStretch = 0.085;
-  const lateShift = -0.034;
-  const lowerBend = 0.22;
-  const upperBend = 0.15;
+  const bendStart = 0.82;
+  const lateStretch = 0.09;
+  const lateShift = -0.24;
+  const auxiliaryScale = 0.27;
 
-  function gaussian(value) {
-    return Math.exp(-0.5 * value ** 2);
-  }
+  // Representative draws for the projected fan, selected to show both bend directions.
+  const fan = [
+    [-2.30, 0.105], [-1.99, 0.060], [-1.72, 0.017], [-1.48, -0.032],
+    [-1.29, -0.069], [-1.12, -0.104], [-0.96, -0.138], [-0.82, -0.164],
+    [-0.69, -0.189], [-0.56, -0.213], [-0.43, -0.236], [-0.29, -0.26],
+    [0, -0.31], [0.1875, -0.225], [0.375, -0.173], [0.5625, -0.133],
+    [0.75, -0.080], [0.9375, -0.028], [1.125, 0.022], [1.3125, 0.069],
+    [1.5, 0.116], [1.6875, 0.163], [1.875, 0.210], [2.0625, 0.253], [2.25, 0.290],
+  ];
 
-  function bendOffset(noise) {
-    // The tail offset can reverse direction without compressing central samples.
-    return lowerBend * gaussian((noise + 2) / 0.44) - upperBend * gaussian((noise - 2) / 0.44);
-  }
-
-  function velocity(value, time) {
+  function velocity(value, auxiliary, time) {
     const scale = 1 - time + time * targetStd;
-    const centered = value - time * targetMean;
-    if (time <= lateStart) return targetMean + (targetStd - 1) * centered / scale;
-
-    const fraction = (time - lateStart) / (1 - lateStart);
-    const warp = 0.72 * fraction ** 1.65 + 0.28 * fraction ** 6;
-    const warpRate = (0.72 * 1.65 * fraction ** 0.65 + 0.28 * 6 * fraction ** 5) / (1 - lateStart);
-    // Invert the monotone toy transport to evaluate one velocity field for both schedules.
-    const linear = scale + lateStretch * warp;
-    const estimate = (centered - lateShift * warp) / linear;
-    let lower = estimate - lowerBend * warp / linear;
-    let upper = estimate + upperBend * warp / linear;
-    for (let index = 0; index < 20; index++) {
-      const mid = (lower + upper) / 2;
-      if (linear * (mid - estimate) + warp * bendOffset(mid) < 0) lower = mid;
-      else upper = mid;
-    }
-    const noise = (lower + upper) / 2;
-    const offset = lateStretch * noise + lateShift + bendOffset(noise);
-    return targetMean + (targetStd - 1) * noise + warpRate * offset;
+    const fraction = Math.max(0, (time - bendStart) / (1 - bendStart));
+    const warp = 0.8 * fraction ** 2.16 + 0.2 * fraction ** 7;
+    const warpRate = (0.8 * 2.16 * fraction ** 1.16 + 0.2 * 7 * fraction ** 6) / (1 - bendStart);
+    // The auxiliary noise coordinate stays fixed in this two-dimensional toy field.
+    const shift = lateShift + auxiliaryScale * auxiliary;
+    const noise = (value - time * targetMean - warp * shift) / (scale + warp * lateStretch);
+    return targetMean + (targetStd - 1) * noise + warpRate * (lateStretch * noise + shift);
   }
 
-  function integrate(grid, initial) {
+  function integrate(grid, initial, auxiliary) {
     const states = [initial];
     for (let index = 0; index < grid.length - 1; index++) {
       const time = grid[index];
       const state = states[index];
-      states.push(state + (grid[index + 1] - time) * velocity(state, time));
+      states.push(state + (grid[index + 1] - time) * velocity(state, auxiliary, time));
     }
     return states;
   }
 
   const densityStates = Array.from({ length: 121 }, (_, index) => -0.6 + 2.4 * index / 120);
   const bandwidth = 0.075;
-  const smoothedTargetStd = Math.hypot(targetStd, bandwidth);
-  const referenceDensity = densityStates.map(state =>
-    gaussian((state - targetMean) / smoothedTargetStd) * targetStd / smoothedTargetStd);
 
-  function endpointDensity(grid) {
-    // Integrate a Gaussian-weighted noise grid, then smooth the actual endpoints.
-    const samples = Array.from({ length: 321 }, (_, index) => {
-      const noise = -4 + 8 * index / 320;
-      return { endpoint: integrate(grid, noise).at(-1), weight: gaussian(noise) };
-    });
-    const totalWeight = samples.reduce((total, sample) => total + sample.weight, 0);
-    return densityStates.map(state => {
-      const weighted = samples.reduce((total, { endpoint, weight }) =>
-        total + weight * gaussian((state - endpoint) / bandwidth), 0);
-      return weighted * targetStd / (bandwidth * totalWeight);
-    });
+  function densitySamples(mean, std) {
+    const smoothedStd = Math.hypot(std, bandwidth);
+    return densityStates.map(state => Math.exp(-0.5 * ((state - mean) / smoothedStd) ** 2) * targetStd / smoothedStd);
   }
+
+  const referenceDensity = densitySamples(targetMean, targetStd);
 
   function makePanel(canvas) {
     const gys = canvas.dataset.flow === "gys";
     const grid = gys ? gysGrid : uniformGrid;
-    const paths = startingStates.map(initial => integrate(grid, initial));
-    // Every GYS evaluation precedes the window, where Euler preserves the Gaussian map.
-    const endpoint = gys ? referenceDensity : endpointDensity(grid);
-    return { canvas, grid, paths, endpoint, gys };
+    const paths = fan.map(([initial, offset]) => {
+      const auxiliary = (offset - lateStretch * initial - lateShift) / auxiliaryScale;
+      return integrate(grid, initial, auxiliary);
+    });
+    // Euler updates are affine in two independent standard Gaussian coordinates.
+    const mean = integrate(grid, 0, 0).at(-1);
+    const std = Math.hypot(integrate(grid, 1, 0).at(-1) - mean, integrate(grid, 0, 1).at(-1) - mean);
+    return { canvas, grid, paths, endpoint: densitySamples(mean, std), gys };
   }
 
   const panels = Array.from(figure.querySelectorAll(".flow-chart"), makePanel);
