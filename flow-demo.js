@@ -102,7 +102,7 @@
     line(x(lateStart), top, x(lateStart), bottom, "#b48b52", [3, 4]);
     line(left, bottom, right, bottom, "#a4b5c1");
     label("State X(τ)", left, 12);
-    label("Late region", right, 12, "right");
+    label("Lipschitz window", right, 12, "right");
     for (const tick of [0, 0.5, 1]) label(String(tick), x(tick), bottom + 16, "center");
     label("Flow time τ", x(0.5), bottom + 32, "center");
 

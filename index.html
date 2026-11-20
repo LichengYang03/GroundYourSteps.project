@@ -16,7 +16,7 @@
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
   <script src="./experiment-tabs.js?v=2" defer></script>
-  <script src="./flow-demo.js?v=2" defer></script>
+  <script src="./flow-demo.js?v=3" defer></script>
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Page navigation">
@@ -58,14 +58,14 @@
       </div>
       <figure class="flow-demo" id="flow-demo" aria-labelledby="flow-title">
         <header class="flow-heading">
-          <h2 id="flow-title">Four-step flow matching</h2>
+          <h2 id="flow-title">Four steps, closer to demonstrations</h2>
           <p>Same starting noise and velocity field. Different sampling schedules, different endpoint distributions.</p>
         </header>
         <div class="flow-panels">
           <div class="flow-panel">
             <div class="flow-panel-heading">
               <h3>Uniform schedule</h3>
-              <span>100 steps</span>
+              <span>100 steps of integration</span>
             </div>
             <canvas class="flow-chart" data-flow="uniform" role="img"
               aria-label="Uniform schedule traces a late bend and ends with a wider distribution shifted away from the demonstrations."></canvas>
@@ -74,17 +74,17 @@
           <div class="flow-panel">
             <div class="flow-panel-heading">
               <h3>GYS-optimized schedule</h3>
-              <span>4 steps</span>
+              <span>4 steps of integration</span>
             </div>
             <canvas class="flow-chart" data-flow="gys" role="img"
               aria-label="Four GYS steps, shown with evaluation nodes at 0, 0.235, 0.49 and 0.674. The final step crosses the late bend and the endpoint distribution closely matches the demonstrations."></canvas>
-            <p>The last step spans the late region and lands closer to the demonstrations.</p>
+            <p>The last step spans the Lipschitz window and lands closer to the demonstrations.</p>
           </div>
         </div>
         <div class="flow-legend">
           <span><i class="flow-generated" aria-hidden="true"></i>Generated</span>
           <span><i class="flow-reference" aria-hidden="true"></i>Demonstrated</span>
-          <span><i class="flow-window" aria-hidden="true"></i>Late region (τ ≥ 0.8)</span>
+          <span><i class="flow-window" aria-hidden="true"></i>Lipschitz window (τ ≥ 0.8)</span>
         </div>
         <div class="flow-controls">
           <button type="button" class="flow-play" disabled>Replay</button>
