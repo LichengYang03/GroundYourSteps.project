@@ -11,7 +11,6 @@
   const targetMean = 0.6;
   const targetStd = 0.25;
   const lateStart = 0.8;
-  const bendStart = 0.82;
   const gysGrid = [0, 0.298, 0.390, 0.583, 0.752, 1];
   const uniformGrid = Array.from({ length: 101 }, (_, index) => index / 100);
   const startingStates = Array.from({ length: 25 }, (_, index) => 2.25 * (index / 12 - 1));
@@ -19,10 +18,10 @@
   function velocity(value, time) {
     const scale = 1 - time + time * targetStd;
     const base = (targetStd - 1) * (value - time * targetMean) / scale + targetMean;
-    // Start gently, then increase the bend through the final part of the window.
-    const lateFraction = Math.max(0, (time - bendStart) / (1 - bendStart));
-    const gate = 1.65 * lateFraction ** 2 + 1.25 * lateFraction ** 9;
-    return base + gate * (3.2 * (value - targetMean) - 1.12);
+    // Make the early bend visible while keeping the strongest turn near the endpoint.
+    const lateFraction = Math.max(0, (time - lateStart) / (1 - lateStart));
+    const gate = 1.85 * lateFraction ** 1.1 + 1.85 * lateFraction ** 13;
+    return base + gate * (2.55 * (value - targetMean) - 1.4);
   }
 
   function integrate(grid, initial) {
