@@ -7,74 +7,45 @@
   const generatedColor = getComputedStyle(figure).getPropertyValue("--generated-blue").trim();
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  // Toy transport adapted from paper Fig. 2(d).
+  // Second coordinate of the toy velocity field in paper Fig. 2(d).
   const targetMean = 0.6;
   const targetStd = 0.25;
   const lateStart = 0.8;
+  const bendStart = 0.82;
   const gysGrid = [0, 0.298, 0.390, 0.583, 0.752, 1];
   const uniformGrid = Array.from({ length: 101 }, (_, index) => index / 100);
+  const startingStates = Array.from({ length: 25 }, (_, index) => 2.25 * (index / 12 - 1));
 
-  const bendStart = 0.82;
-  const lateStretch = 0.09;
-  const lateShift = -0.24;
-  const auxiliaryScale = 0.27;
-
-  // Representative draws for the projected fan, selected to show both bend directions.
-  const fan = [
-    [-2.30, -0.370], [-1.99, -0.362], [-1.72, -0.354], [-1.48, -0.345],
-    [-1.29, -0.337], [-1.12, -0.329], [-0.96, -0.321], [-0.82, -0.313],
-    [-0.69, -0.305], [-0.56, -0.296], [-0.43, -0.288], [-0.29, -0.280],
-    [0, -0.270], [0.1875, -0.225], [0.375, -0.173], [0.5625, -0.133],
-    [0.75, -0.080], [0.9375, -0.028], [1.125, 0.022], [1.3125, 0.069],
-    [1.5, 0.116], [1.6875, 0.163], [1.875, 0.210], [2.0625, 0.253], [2.25, 0.290],
-  ];
-
-  function velocity(value, auxiliary, time) {
+  function velocity(value, time) {
     const scale = 1 - time + time * targetStd;
-    const fraction = Math.max(0, (time - bendStart) / (1 - bendStart));
-    const warp = 0.8 * fraction ** 2.16 + 0.2 * fraction ** 7;
-    const warpRate = (0.8 * 2.16 * fraction ** 1.16 + 0.2 * 7 * fraction ** 6) / (1 - bendStart);
-    // The auxiliary noise coordinate stays fixed in this two-dimensional toy field.
-    const shift = lateShift + auxiliaryScale * auxiliary;
-    const noise = (value - time * targetMean - warp * shift) / (scale + warp * lateStretch);
-    return targetMean + (targetStd - 1) * noise + warpRate * (lateStretch * noise + shift);
+    const base = (targetStd - 1) * (value - time * targetMean) / scale + targetMean;
+    // Start gently, then increase the bend through the final part of the window.
+    const lateFraction = Math.max(0, (time - bendStart) / (1 - bendStart));
+    const gate = 1.65 * lateFraction ** 2 + 1.25 * lateFraction ** 9;
+    return base + gate * (3.2 * (value - targetMean) - 1.12);
   }
 
-  function integrate(grid, initial, auxiliary) {
+  function integrate(grid, initial) {
     const states = [initial];
     for (let index = 0; index < grid.length - 1; index++) {
       const time = grid[index];
       const state = states[index];
-      states.push(state + (grid[index + 1] - time) * velocity(state, auxiliary, time));
+      states.push(state + (grid[index + 1] - time) * velocity(state, time));
     }
     return states;
   }
 
-  const densityStates = Array.from({ length: 121 }, (_, index) => -0.6 + 2.4 * index / 120);
-  const bandwidth = 0.075;
-
-  function densitySamples(mean, std) {
-    const smoothedStd = Math.hypot(std, bandwidth);
-    return densityStates.map(state => Math.exp(-0.5 * ((state - mean) / smoothedStd) ** 2) * targetStd / smoothedStd);
-  }
-
-  const referenceDensity = densitySamples(targetMean, targetStd);
-
   function makePanel(canvas) {
     const gys = canvas.dataset.flow === "gys";
     const grid = gys ? gysGrid : uniformGrid;
-    const paths = fan.map(([initial, offset]) => {
-      const auxiliary = (offset - lateStretch * initial - lateShift) / auxiliaryScale;
-      return integrate(grid, initial, auxiliary);
-    });
-    // Euler updates are affine in two independent standard Gaussian coordinates.
-    const mean = integrate(grid, 0, 0).at(-1);
-    const std = Math.hypot(integrate(grid, 1, 0).at(-1) - mean, integrate(grid, 0, 1).at(-1) - mean);
-    return { canvas, grid, paths, endpoint: densitySamples(mean, std), gys };
+    const paths = startingStates.map(initial => integrate(grid, initial));
+    // The updates are affine, so propagating 0 and 1 gives the Gaussian endpoint law.
+    const mean = integrate(grid, 0).at(-1);
+    const std = integrate(grid, 1).at(-1) - mean;
+    return { canvas, grid, paths, mean, std, gys };
   }
 
   const panels = Array.from(figure.querySelectorAll(".flow-chart"), makePanel);
-  const densityPeak = Math.max(1, ...panels.flatMap(panel => panel.endpoint));
   const duration = 1200;
   const autoplayThreshold = 0.35;
   let progress = 1;
@@ -146,7 +117,7 @@
       ctx.moveTo(left, y(states[0]));
       for (let step = 1; step <= segment; step++) ctx.lineTo(x(grid[step]), y(states[step]));
       ctx.lineTo(x(progress), y(current));
-      ctx.globalAlpha = highlighted ? 1 : 0.42;
+      ctx.globalAlpha = highlighted ? 1 : 0.34;
       ctx.strokeStyle = generatedColor;
       ctx.lineWidth = highlighted ? 1.9 : 1;
       ctx.stroke();
@@ -173,11 +144,13 @@
       label(String(tick), densityX(tick), base + 17, "center");
     }
 
-    function density(amplitudes, ink, dashed = false) {
+    function density(mean, std, ink, dashed = false) {
       ctx.beginPath();
-      amplitudes.forEach((amplitude, index) => {
-        ctx.lineTo(densityX(densityStates[index]), base - 51 * amplitude / densityPeak);
-      });
+      for (let index = 0; index <= 120; index++) {
+        const state = -0.6 + 2.4 * index / 120;
+        const amplitude = Math.exp(-0.5 * ((state - mean) / std) ** 2) * targetStd / std;
+        ctx.lineTo(densityX(state), base - 51 * amplitude);
+      }
       ctx.strokeStyle = ink;
       ctx.lineWidth = dashed ? 1.5 : 2.2;
       ctx.setLineDash(dashed ? [4, 4] : []);
@@ -196,9 +169,9 @@
 
     if (progress >= 0.98) {
       ctx.globalAlpha = Math.min(1, 0.2 + 40 * (progress - 0.98));
-      density(panel.endpoint, generatedColor);
+      density(panel.mean, panel.std, generatedColor);
     }
-    density(referenceDensity, "#253d4d", true);
+    density(targetMean, targetStd, "#253d4d", true);
   }
 
   function render(value) {
