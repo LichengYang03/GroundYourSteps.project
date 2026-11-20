@@ -17,11 +17,16 @@
   const uniformGrid = Array.from({ length: 101 }, (_, index) => index / 100);
   const startingStates = Array.from({ length: 25 }, (_, index) => 2.25 * (index / 12 - 1));
 
+  function smoothRamp(start, end, time) {
+    const u = Math.min(1, Math.max(0, (time - start) / (end - start)));
+    return u * u * (3 - 2 * u);
+  }
+
   function velocity(value, time) {
     const scale = 1 - time + time * targetStd;
     const base = (targetStd - 1) * (value - time * targetMean) / scale + targetMean;
-    const ramp = Math.max(0, (time - lateStart) / (1 - lateStart));
-    const gate = ramp / (1 + Math.exp(-(time - lateStart) / 0.025));
+    // Make the bend gentle near 0.85 and more pronounced near 0.95.
+    const gate = 0.36 * smoothRamp(lateStart, 0.895, time) + 0.75 * smoothRamp(0.88, 1, time);
     return base + lateResidualScale * gate * (3.2 * (value - targetMean) - 1.12);
   }
 
