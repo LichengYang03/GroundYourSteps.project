@@ -12,21 +12,17 @@
   const targetStd = 0.25;
   const lateStart = 0.8;
   // Amplify the toy field’s late residual so the bend is visible at page scale.
-  const lateResidualScale = 1.8;
+  const lateResidualScale = 2.85;
   const gysGrid = [0, 0.298, 0.390, 0.583, 0.752, 1];
   const uniformGrid = Array.from({ length: 101 }, (_, index) => index / 100);
   const startingStates = Array.from({ length: 25 }, (_, index) => 2.25 * (index / 12 - 1));
 
-  function smoothRamp(start, end, time) {
-    const u = Math.min(1, Math.max(0, (time - start) / (end - start)));
-    return u * u * (3 - 2 * u);
-  }
-
   function velocity(value, time) {
     const scale = 1 - time + time * targetStd;
     const base = (targetStd - 1) * (value - time * targetMean) / scale + targetMean;
-    // Make the bend gentle near 0.85 and more pronounced near 0.95.
-    const gate = 0.36 * smoothRamp(lateStart, 0.895, time) + 0.75 * smoothRamp(0.88, 1, time);
+    // The residual grows increasingly fast throughout the Lipschitz window.
+    const lateFraction = Math.max(0, (time - lateStart) / (1 - lateStart));
+    const gate = lateFraction ** 2.25;
     return base + lateResidualScale * gate * (3.2 * (value - targetMean) - 1.12);
   }
 
