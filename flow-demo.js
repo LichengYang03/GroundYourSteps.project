@@ -23,7 +23,9 @@
     const base = targetMean + (targetStd - 1) * noise;
     const u = Math.max(0, (time - bendStart) / (1 - bendStart));
     // Expand about the same noise quantile throughout the bend.
-    const gain = 0.76327494 * (u + 0.35 * u ** 2 + 0.7 * u ** 10);
+    const terminalPhase = Math.max(0, (time - 0.94) / 0.06);
+    const terminalGain = 0.75 * terminalPhase ** 2 + 1.6 * terminalPhase ** 9;
+    const gain = 0.76327494 * (u + 0.35 * u ** 2 + 0.7 * u ** 10) + terminalGain;
     return base + gain * (noise - pivotNoise);
   }
 
