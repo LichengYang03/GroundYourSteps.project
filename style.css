@@ -311,7 +311,7 @@ figcaption { font-size: 1rem; }
   --flow-progress: 1;
   --thumb-offset: calc((100% - var(--thumb-width)) * var(--flow-progress));
   --track-fill: calc(var(--thumb-offset) + var(--thumb-width) / 2);
-  --track-background: linear-gradient(to right, #006eb8 var(--track-fill), #dce7ef var(--track-fill));
+  --track-background: linear-gradient(to right, #0090fd var(--track-fill), #dce7ef var(--track-fill));
   position: relative;
   flex: 0 1 280px;
   min-width: 0;
