@@ -15,6 +15,20 @@
   const uniformGrid = Array.from({ length: 101 }, (_, index) => index / 100);
   const startingStates = Array.from({ length: 25 }, (_, index) => 2.25 * (index / 12 - 1));
 
+  const lateStretch = 0.085;
+  const lateShift = -0.034;
+  const lowerBend = 0.22;
+  const upperBend = 0.15;
+
+  function gaussian(value) {
+    return Math.exp(-0.5 * value ** 2);
+  }
+
+  function bendOffset(noise) {
+    // The tail offset can reverse direction without compressing central samples.
+    return lowerBend * gaussian((noise + 2) / 0.44) - upperBend * gaussian((noise - 2) / 0.44);
+  }
+
   function velocity(value, time) {
     const scale = 1 - time + time * targetStd;
     const centered = value - time * targetMean;
@@ -24,18 +38,17 @@
     const warp = 0.72 * fraction ** 1.65 + 0.28 * fraction ** 6;
     const warpRate = (0.72 * 1.65 * fraction ** 0.65 + 0.28 * 6 * fraction ** 5) / (1 - lateStart);
     // Invert the monotone toy transport to evaluate one velocity field for both schedules.
-    const linear = scale + 0.09 * warp;
-    const wave = 0.125 * warp;
-    const estimate = (centered + 0.019 * warp) / linear;
-    let lower = estimate - wave / linear;
-    let upper = estimate + wave / linear;
+    const linear = scale + lateStretch * warp;
+    const estimate = (centered - lateShift * warp) / linear;
+    let lower = estimate - lowerBend * warp / linear;
+    let upper = estimate + upperBend * warp / linear;
     for (let index = 0; index < 20; index++) {
       const mid = (lower + upper) / 2;
-      if (linear * (mid - estimate) < wave * Math.sin(2.5 * mid)) lower = mid;
+      if (linear * (mid - estimate) + warp * bendOffset(mid) < 0) lower = mid;
       else upper = mid;
     }
     const noise = (lower + upper) / 2;
-    const offset = 0.09 * noise - 0.125 * Math.sin(2.5 * noise) - 0.019;
+    const offset = lateStretch * noise + lateShift + bendOffset(noise);
     return targetMean + (targetStd - 1) * noise + warpRate * offset;
   }
 
@@ -50,19 +63,21 @@
   }
 
   const densityStates = Array.from({ length: 121 }, (_, index) => -0.6 + 2.4 * index / 120);
-  const referenceDensity = densityStates.map(state => Math.exp(-0.5 * ((state - targetMean) / targetStd) ** 2));
+  const bandwidth = 0.075;
+  const smoothedTargetStd = Math.hypot(targetStd, bandwidth);
+  const referenceDensity = densityStates.map(state =>
+    gaussian((state - targetMean) / smoothedTargetStd) * targetStd / smoothedTargetStd);
 
   function endpointDensity(grid) {
-    const bandwidth = 0.055;
     // Integrate a Gaussian-weighted noise grid, then smooth the actual endpoints.
     const samples = Array.from({ length: 321 }, (_, index) => {
       const noise = -4 + 8 * index / 320;
-      return { endpoint: integrate(grid, noise).at(-1), weight: Math.exp(-0.5 * noise ** 2) };
+      return { endpoint: integrate(grid, noise).at(-1), weight: gaussian(noise) };
     });
     const totalWeight = samples.reduce((total, sample) => total + sample.weight, 0);
     return densityStates.map(state => {
       const weighted = samples.reduce((total, { endpoint, weight }) =>
-        total + weight * Math.exp(-0.5 * ((state - endpoint) / bandwidth) ** 2), 0);
+        total + weight * gaussian((state - endpoint) / bandwidth), 0);
       return weighted * targetStd / (bandwidth * totalWeight);
     });
   }
