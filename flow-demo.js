@@ -18,10 +18,10 @@
   function velocity(value, time) {
     const scale = 1 - time + time * targetStd;
     const base = (targetStd - 1) * (value - time * targetMean) / scale + targetMean;
-    // Make the early bend visible while keeping the strongest turn near the endpoint.
+    // The late drift bends the entire displayed fan, and the higher power sharpens the endpoint turn.
     const lateFraction = Math.max(0, (time - lateStart) / (1 - lateStart));
-    const gate = 1.85 * lateFraction ** 1.1 + 1.85 * lateFraction ** 13;
-    return base + gate * (2.55 * (value - targetMean) - 1.4);
+    const gate = 2.05 * lateFraction ** 1.3 + 1.85 * lateFraction ** 12;
+    return base + gate * (0.85 * (value - targetMean) - 2.1);
   }
 
   function integrate(grid, initial) {
@@ -116,7 +116,7 @@
       ctx.moveTo(left, y(states[0]));
       for (let step = 1; step <= segment; step++) ctx.lineTo(x(grid[step]), y(states[step]));
       ctx.lineTo(x(progress), y(current));
-      ctx.globalAlpha = highlighted ? 1 : 0.34;
+      ctx.globalAlpha = highlighted ? 1 : 0.42;
       ctx.strokeStyle = generatedColor;
       ctx.lineWidth = highlighted ? 1.9 : 1;
       ctx.stroke();
