@@ -220,6 +220,19 @@
     if (frame === null) start();
     else pause();
   });
+  slider.addEventListener("pointerdown", event => {
+    if (!event.isPrimary || event.button !== 0) return;
+    sliderTrack.classList.add("is-pressed");
+    const press = new AbortController();
+    const release = releaseEvent => {
+      if (releaseEvent.type !== "blur" && releaseEvent.pointerId !== event.pointerId) return;
+      sliderTrack.classList.remove("is-pressed");
+      press.abort();
+    };
+    for (const type of ["pointerup", "pointercancel", "blur"]) {
+      window.addEventListener(type, release, { signal: press.signal });
+    }
+  });
   slider.addEventListener("input", () => {
     observer.disconnect();
     render(Number(slider.value) / 1000);
