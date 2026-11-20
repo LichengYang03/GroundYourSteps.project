@@ -44,7 +44,7 @@
   }
 
   const panels = Array.from(figure.querySelectorAll(".flow-chart"), makePanel);
-  const duration = 3200;
+  const duration = 2000;
   const autoplayThreshold = 0.35;
   let progress = 1;
   let frame = null;
