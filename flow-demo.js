@@ -11,7 +11,7 @@
   const lateStart = 0.8;
   // Amplify the toy field’s late residual so the bend is visible at page scale.
   const lateResidualScale = 1.8;
-  const gysGrid = [0, 0.235, 0.49, 0.674, 1];
+  const gysGrid = [0, 0.298, 0.390, 0.583, 0.752, 1];
   const uniformGrid = Array.from({ length: 101 }, (_, index) => index / 100);
   const startingStates = Array.from({ length: 25 }, (_, index) => 2.25 * (index / 12 - 1));
 

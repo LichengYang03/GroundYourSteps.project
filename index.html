@@ -16,7 +16,7 @@
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
   <script src="./experiment-tabs.js?v=2" defer></script>
-  <script src="./flow-demo.js?v=3" defer></script>
+  <script src="./flow-demo.js?v=4" defer></script>
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Page navigation">
@@ -58,8 +58,8 @@
       </div>
       <figure class="flow-demo" id="flow-demo" aria-labelledby="flow-title">
         <header class="flow-heading">
-          <h2 id="flow-title">Four steps, closer to demonstrations</h2>
-          <p>Same starting noise and velocity field. Different sampling schedules, different endpoint distributions.</p>
+          <h2 id="flow-title">Five-steps flow matching, closer to demonstrations</h2>
+          <p>Same learned velocity field. Different sampling schedules, different endpoint distributions.</p>
         </header>
         <div class="flow-panels">
           <div class="flow-panel">
@@ -74,10 +74,10 @@
           <div class="flow-panel">
             <div class="flow-panel-heading">
               <h3>GYS-optimized schedule</h3>
-              <span>4 steps of integration</span>
+              <span>5 steps of integration</span>
             </div>
             <canvas class="flow-chart" data-flow="gys" role="img"
-              aria-label="Four GYS steps, shown with evaluation nodes at 0, 0.235, 0.49 and 0.674. The final step crosses the late bend and the endpoint distribution closely matches the demonstrations."></canvas>
+              aria-label="Five GYS steps, shown with evaluation nodes at 0, 0.298, 0.390, 0.583 and 0.752. The final step crosses the late bend and the endpoint distribution closely matches the demonstrations."></canvas>
             <p>The last step spans the Lipschitz window and lands closer to the demonstrations.</p>
           </div>
         </div>
