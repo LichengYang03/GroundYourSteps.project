@@ -2,6 +2,7 @@
   const figure = document.getElementById("flow-demo");
   const play = figure.querySelector(".flow-play");
   const slider = figure.querySelector("#flow-time");
+  const sliderTrack = slider.closest(".flow-slider");
   const readout = figure.querySelector(".flow-time-value");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -175,7 +176,7 @@
   function render(value) {
     progress = value;
     slider.value = Math.round(progress * 1000);
-    slider.style.setProperty("--flow-progress", Number(slider.value) / 1000);
+    sliderTrack.style.setProperty("--flow-progress", Number(slider.value) / 1000);
     slider.setAttribute("aria-valuetext", progress.toFixed(2));
     readout.textContent = progress.toFixed(2);
     panels.forEach(drawPanel);
